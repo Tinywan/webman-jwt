@@ -29,7 +29,8 @@ $user = [
 $token = JwtToken::generateToken($user);
 var_dump(json_encode($token));
 ```
-输出
+
+##### 输出（Json）
 ```json
 {
     "token_type": "Bearer",
@@ -39,7 +40,7 @@ var_dump(json_encode($token));
 }
 ```
 
-#### 响应参数
+##### 响应参数
 
 | 参数|类型|描述|示例值|
 |:---|:---|:---|:---|
