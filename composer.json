@@ -1,0 +1,30 @@
+{
+  "name": "tinywan/jwt",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.4",
+    "firebase/php-jwt": "^5.5",
+    "workerman/webman-framework": "^1.2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tinywan\\Jwt\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tinywan\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0",
+    "workerman/webman": "^1.0"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer//"
+    }
+  }
+}
