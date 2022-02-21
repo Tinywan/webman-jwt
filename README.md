@@ -27,11 +27,11 @@ $user = [
     'name'  => 'Tinywan',
     'email' => 'Tinywan@163.com'
 ];
-$token = JwtToken::generateToken($user);
-var_dump(json_encode($token));
+$accessToken = JwtToken::generateToken($user);
+var_dump(json_encode($accessToken));
 ```
 
-##### 输出（Json）
+##### 输出（json格式）
 ```json
 {
     "token_type": "Bearer",
@@ -65,5 +65,5 @@ $email = JwtToken::getExtendVal('email');
 ### 刷新令牌
 
 ```php
-$refreshToken = JwtToken::refreshToken();
+$accessToken = JwtToken::refreshToken();
 ```
