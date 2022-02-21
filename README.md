@@ -23,7 +23,7 @@ composer require tinywan/jwt
 use Tinywan\Jwt\JwtToken;
 
 $user = [
-    'uid'  => 2022,
+    'id'  => 2022,
     'name'  => 'Tinywan',
     'email' => 'Tinywan@163.com'
 ];

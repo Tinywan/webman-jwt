@@ -285,7 +285,7 @@ class JwtToken
     }
 
     /**
-     * 实例化配置
+     * 获取配置文件
      * @param $extend $config
      * @return array
      * @throws JwtConfigException
@@ -293,8 +293,9 @@ class JwtToken
     private static function _getConfig(array $extend = []): array
     {
         $config = config('plugin.tinywan.jwt.app.jwt');
-        $config['access_exp'] = $extend['access_exp'] ?? $config['access_exp'];
-        $config['refresh_exp'] = $extend['refresh_exp'] ?? $config['refresh_exp'];
+        if (empty($config)) {
+            throw new JwtConfigException('jwt配置文件不存在');
+        }
         return $config;
     }
 }
