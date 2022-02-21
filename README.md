@@ -6,3 +6,50 @@
 [![PHP Version Require](http://poser.pugx.org/tinywan/jwt/require/php)](https://packagist.org/packages/tinywan/casbin)
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/jwt/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/jwt?color=ff69b4)]()
+
+
+## 安装
+
+```shell
+composer require tinywan/validate
+```
+
+##  基本用法
+
+### 生成令牌
+
+```php
+use Tinywan\Jwt\JwtToken;
+
+$user = [
+    'uid'  => 2022,
+    'name'  => 'Tinywan',
+    'email' => 'Tinywan@163.com'
+];
+$token = JwtToken::generateToken($user);
+var_dump(json_encode($token));
+```
+输出
+```json
+{
+        "token_type": "Bearer",
+        "expires_in": 36000,
+        "access_token": "eyJ0eXAiOiJAUR-Gqtnk9LUPO8IDrLK7tjCwQZ7CI...",
+        "refresh_token": "eyJ0eXAiOiJIEGkKprvcccccQvsTJaOyNy8yweZc..."
+    }
+```
+
+### 获取当前uid
+
+```php
+use Tinywan\Jwt\JwtToken;
+$uid = JwtToken::getCurrentId();
+```
+
+### 获取其他扩展字段
+
+```php
+use Tinywan\Jwt\JwtToken;
+$email = JwtToken::getExtendVal('email');
+```
+
