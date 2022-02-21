@@ -41,12 +41,12 @@ var_dump(json_encode($token));
 
 #### 响应参数
 
-| 参数|类型|是否必填|最大长度|描述|示例值|
-|:---|:---|:---|:---|:---|:---|
-|token_type| string | 是| 8 | Token 类型 | Bearer |
-|expires_in| int | 是| 16 | 凭证有效时间，单位：秒 | 36000 |
-|access_token| string | 是| 128 | 访问凭证 | XXXXXXXXXXXXXXXXXXXXXXXXXX |
-|refresh_token| string | 是| 128 | 刷新凭证（访问凭证过期使用 ） | XXXXXXXXXXXXXXXXXXXXXXXXXX |
+| 参数|类型|描述|示例值|
+|:---|:---|:---|:---|
+|token_type| string |Token 类型 | Bearer |
+|expires_in| int |凭证有效时间，单位：秒 | 36000 |
+|access_token| string |访问凭证 | XXXXXXXXXXXXXXXXXXXX|
+|refresh_token| string | 刷新凭证（访问凭证过期使用 ） | XXXXXXXXXXXXXXXXXXX|
 
 ### 获取当前uid
 
