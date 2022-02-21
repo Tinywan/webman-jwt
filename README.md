@@ -1,7 +1,6 @@
 # webman jwt 认证插件
 
-[![Latest Stable Version](http://poser.pugx.org/tinywan/jwt/v)](https://packagist.org/packages/tinywan/jwt)
-[![Total Downloads](http://poser.pugx.org/tinywan/jwt/downloads)](https://packagist.org/packages/tinywan/jwt) 
+[![Total Downloads](http://poser.pugx.org/tinywan/jwt/downloads)](https://packagist.org/packages/tinywan/jwt)
 [![License](http://poser.pugx.org/tinywan/jwt/license)](https://packagist.org/packages/tinywan/jwt) 
 [![webman-jwt](https://img.shields.io/github/last-commit/tinywan/jwt/main)]()
 [![webman-jwt](https://img.shields.io/github/v/tag/tinywan/jwt?color=ff69b4)]()
