@@ -1,5 +1,6 @@
 {
   "name": "tinywan/jwt",
+  "description": "Webman Jwt Plugin",
   "type": "library",
   "license": "MIT",
   "require": {
