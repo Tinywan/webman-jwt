@@ -67,3 +67,26 @@ $email = JwtToken::getExtendVal('email');
 ```php
 $accessToken = JwtToken::refreshToken();
 ```
+
+## Generate RS512, RS384 and RS256 keys
+
+### RS512
+
+```shell
+ssh-keygen -t rsa -b 4096 -E SHA512 -m PEM -P "" -f RS512.key
+openssl rsa -in RS512.key -pubout -outform PEM -out RS512.key.pub
+```
+
+### RS512
+
+```shell
+ssh-keygen -t rsa -b 4096 -E SHA354 -m PEM -P "" -f RS384.key
+openssl rsa -in RS384.key -pubout -outform PEM -out RS384.key.pub
+```
+
+### RS256
+
+```shell
+ssh-keygen -t rsa -b 4096 -E SHA256 -m PEM -P "" -f RS256.key
+openssl rsa -in RS256.key -pubout -outform PEM -out RS256.key.pub
+```

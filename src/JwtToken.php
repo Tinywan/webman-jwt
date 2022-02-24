@@ -12,6 +12,7 @@ namespace Tinywan\Jwt;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
 use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
@@ -199,7 +200,8 @@ class JwtToken
         $secretKey = self::ACCESS_TOKEN == $tokenType ? self::getPublicKey($config['algorithms']) : self::getPublicKey($config['algorithms'], self::REFRESH_TOKEN);
         JWT::$leeway = 60;
 
-        return (array) JWT::decode($token, $secretKey, [$config['algorithms']]);
+        // v5.5.1 return (array) JWT::decode($token, $secretKey, [$config['algorithms']]);
+        return (array) JWT::decode($token,new Key($secretKey, $config['algorithms']));
     }
 
     /**
@@ -252,6 +254,7 @@ class JwtToken
             case 'HS256':
                 $key = self::ACCESS_TOKEN == $tokenType ? $config['access_secret_key'] : $config['refresh_secret_key'];
                 break;
+            case 'RS512':
             case 'RS256':
                 $key = self::ACCESS_TOKEN == $tokenType ? $config['access_public_key'] : $config['refresh_public_key'];
                 break;
@@ -274,6 +277,7 @@ class JwtToken
             case 'HS256':
                 $key = self::ACCESS_TOKEN == $tokenType ? $config['access_secret_key'] : $config['refresh_secret_key'];
                 break;
+            case 'RS512':
             case 'RS256':
                 $key = self::ACCESS_TOKEN == $tokenType ? $config['access_private_key'] : $config['refresh_private_key'];
                 break;
