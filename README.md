@@ -1,4 +1,4 @@
-# webman jwt 认证插件
+# JSON Web Token (JWT) for webman plugin
 
 [![Total Downloads](http://poser.pugx.org/tinywan/jwt/downloads)](https://packagist.org/packages/tinywan/jwt)
 [![License](http://poser.pugx.org/tinywan/jwt/license)](https://packagist.org/packages/tinywan/jwt) 
