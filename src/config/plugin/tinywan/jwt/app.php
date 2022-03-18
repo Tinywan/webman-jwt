@@ -18,8 +18,7 @@ return [
         'iat' => time(),
 
         /**
-         * access令牌 RS256 私钥
-         * 生成RSA私钥(Linux系统)：openssl genrsa -out access_private_key.key 1024 (2048)
+         * access令牌私钥
          */
         'access_private_key' => <<<EOD
 -----BEGIN RSA PRIVATE KEY-----
@@ -28,8 +27,7 @@ return [
 EOD,
 
         /**
-         * access令牌 RS256 公钥
-         * 生成RSA公钥(Linux系统)：openssl rsa -in access_private_key.key -pubout -out access_public_key.key
+         * access令牌公钥
          */
         'access_public_key' => <<<EOD
 -----BEGIN PUBLIC KEY-----
@@ -38,8 +36,7 @@ EOD,
 EOD,
 
         /**
-         * refresh令牌 RS256 私钥
-         * 生成RSA私钥(Linux系统)：openssl genrsa -out refresh_private_key.key 1024 (2048)
+         * refresh令牌私钥
          */
         'refresh_private_key' => <<<EOD
 -----BEGIN RSA PRIVATE KEY-----
@@ -48,8 +45,7 @@ EOD,
 EOD,
 
         /**
-         * refresh令牌 RS256 公钥
-         * 生成RSA公钥(Linux系统)：openssl rsa -in refresh_private_key.key -pubout -out refresh_public_key.key
+         * refresh令牌公钥
          */
         'refresh_public_key' => <<<EOD
 -----BEGIN PUBLIC KEY-----

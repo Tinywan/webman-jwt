@@ -1,6 +1,6 @@
 {
   "name": "tinywan/jwt",
-  "description": "Webman Jwt Plugin",
+  "description": "JSON Web Token (JWT) for webman plugin",
   "type": "library",
   "license": "MIT",
   "require": {
@@ -19,7 +19,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
-    "workerman/webman": "^1.0"
+    "workerman/webman": "^1.0",
+    "mockery/mockery": "^1.5"
   },
   "repositories": {
     "packagist": {
