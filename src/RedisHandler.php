@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt;
 
-use Tinywan\Jwt\Exception\JwtTokenException;
+use Tinywan\Jwt\Exception\JwtCacheTokenException;
 use Workerman\Redis\Client;
 
 class RedisHandler
@@ -30,8 +30,8 @@ class RedisHandler
     {
         if (!(static::$instance instanceof Client)) {
             $config = config('redis.default');
-            $redis = new Client('redis://' . $config['host'] . ':' . $config['port']);
-            $redis->auth($config['password'] ?? '');
+            static::$instance = new Client('redis://' . $config['host'] . ':' . $config['port']);
+            static::$instance->auth($config['password'] ?? '');
         }
         return static::$instance;
     }
@@ -44,7 +44,7 @@ class RedisHandler
      * @return bool
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function generateCacheToken(string $uid, string $ip, string $user)
+    public static function generateCacheToken(string $uid, string $ip, string $user): bool
     {
         $cacheKey = self::JWT_TOKEN_PRE.':'.$uid;
         $keyList = self::instance()->keys($cacheKey.':*');
@@ -65,11 +65,11 @@ class RedisHandler
      * @return bool
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function verifyeCacheToken(string $uid, string $ip)
+    public static function verifyCacheToken(string $uid, string $ip): bool
     {
         $cacheKey = self::JWT_TOKEN_PRE.':'.$uid.':'.$ip;
         if (!self::instance()->exists($cacheKey)) {
-            throw new JwtTokenException('该账号已在其他设备登录，强制下线');
+            throw new JwtCacheTokenException('该账号已在其他设备登录，强制下线');
         }
         return true;
     }

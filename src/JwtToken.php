@@ -14,6 +14,7 @@ use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
+use Tinywan\Jwt\Exception\JwtCacheTokenException;
 use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
 use UnexpectedValueException;
@@ -84,7 +85,7 @@ class JwtToken
             throw new JwtTokenException('刷新令牌会话已过期，请再次登录！');
         } catch (UnexpectedValueException $unexpectedValueException) {
             throw new JwtTokenException('刷新令牌获取的扩展字段不存在');
-        } catch (\Exception $exception) {
+        } catch (JwtCacheTokenException | \Exception $exception) {
             throw new JwtTokenException($exception->getMessage());
         }
         $tokenPayload['exp'] = $tokenPayload['exp'] + $config['access_exp'];
@@ -139,7 +140,7 @@ class JwtToken
             throw new JwtTokenException('身份验证会话已过期，请重新登录！');
         } catch (UnexpectedValueException $unexpectedValueException) {
             throw new JwtTokenException('获取的扩展字段不存在');
-        } catch (\Exception $exception) {
+        } catch (JwtCacheTokenException | \Exception $exception) {
             throw new JwtTokenException($exception->getMessage());
         }
     }
@@ -203,7 +204,7 @@ class JwtToken
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
         $res = json_decode(json_encode($decoded), true);
         if ($config['is_single_device']) {
-            RedisHandler::verifyeCacheToken($res['extend']['id'] ?? 2022,request()->getRealIp());
+            RedisHandler::verifyCacheToken((string) $res['extend']['id'] ?? 2022,request()->getRealIp());
         }
         return $res;
     }
@@ -237,7 +238,7 @@ class JwtToken
             'extend' => $extend
         ];
         if ($config['is_single_device']) {
-            RedisHandler::generateCacheToken($extend['id'],request()->getRealIp(),json_encode($extend));
+            RedisHandler::generateCacheToken((string) $extend['id'],request()->getRealIp(),json_encode($extend));
         }
         $resPayLoad['accessPayload'] = $basePayload;
         $basePayload['exp'] = time() + $config['refresh_exp'];
