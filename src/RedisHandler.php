@@ -9,66 +9,40 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt;
 
+use support\Redis;
 use Tinywan\Jwt\Exception\JwtCacheTokenException;
-use Workerman\Redis\Client;
 
 class RedisHandler
 {
-    public const JWT_TOKEN_PRE = 'JWT_TOKEN';
-
-    /**
-     * @var Client|null
-     */
-    protected static ?Client $instance = null;
-
-    /**
-     * @desc: 方法描述
-     * @return Client|null
-     * @author Tinywan(ShaoBo Wan)
-     */
-    public static function instance(): ?Client
-    {
-        if (!(static::$instance instanceof Client)) {
-            $config = config('redis.default');
-            static::$instance = new Client('redis://' . $config['host'] . ':' . $config['port']);
-            static::$instance->auth($config['password'] ?? '');
-        }
-        return static::$instance;
-    }
-
     /**
      * @desc: 生成设备缓存令牌
-     * @param string $uid
-     * @param string $ip
-     * @param string $user
-     * @return bool
+     * （1）登录时，判断该账号是否在其它设备登录，如果有，就请空之前key清除，
+     * （2）重新设置key 。然后存储用户信息和ip地址拼接为key，存储在redis当中
+     * @param array $args
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function generateCacheToken(string $uid, string $ip, string $user): bool
+    public static function generateToken(array $args): void
     {
-        $cacheKey = self::JWT_TOKEN_PRE.':'.$uid;
-        $keyList = self::instance()->keys($cacheKey.':*');
-        if (!empty($keyList)) {
-            // 登录时，判断该账号是否在其它设备登录，如果有，就请空之前key清除，
-            foreach ($keyList as $key) {
-                self::instance()->del($key);
-            }
+        $cacheKey = $args['cache_token_pre'].$args['id'];
+        $key = Redis::keys($cacheKey.':*');
+        if (!empty($key)) {
+            Redis::del(current($key));
         }
-        // 重新设置key 。然后存储用户信息和ip地址拼接为key，存储在redis当中
-        return self::instance()->setex($cacheKey.':'.$ip, 3600, $user);
+        Redis::setex($cacheKey.':'.$args['ip'], $args['cache_token_ttl'], $args['extend']);
     }
 
     /**
      * @desc: 检查设备缓存令牌
+     * @param string $pre
      * @param string $uid
      * @param string $ip
      * @return bool
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function verifyCacheToken(string $uid, string $ip): bool
+    public static function verifyToken(string $pre, string $uid, string $ip): bool
     {
-        $cacheKey = self::JWT_TOKEN_PRE.':'.$uid.':'.$ip;
-        if (!self::instance()->exists($cacheKey)) {
+        $cacheKey = $pre.$uid.':'.$ip;
+        if (!Redis::exists($cacheKey)) {
             throw new JwtCacheTokenException('该账号已在其他设备登录，强制下线');
         }
         return true;

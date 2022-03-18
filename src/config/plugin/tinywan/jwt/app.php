@@ -21,9 +21,10 @@ return [
         'leeway' => 60,
         // 单设备登录
         'is_single_device' => false,
-        'device_config' => [
-
-        ],
+        // 缓存令牌时间，单位：秒
+        'cache_token_ttl' => 72000,
+        // 缓存令牌前缀
+        'cache_token_pre' => 'JWT:TOKEN:',
 
         /**
          * access令牌私钥

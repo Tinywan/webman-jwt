@@ -204,7 +204,7 @@ class JwtToken
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
         $res = json_decode(json_encode($decoded), true);
         if ($config['is_single_device']) {
-            RedisHandler::verifyCacheToken((string) $res['extend']['id'] ?? 2022,request()->getRealIp());
+            RedisHandler::verifyToken($config['cache_token_pre'], (string) $res['extend']['id'] ?? 2022, request()->getRealIp());
         }
         return $res;
     }
@@ -238,7 +238,14 @@ class JwtToken
             'extend' => $extend
         ];
         if ($config['is_single_device']) {
-            RedisHandler::generateCacheToken((string) $extend['id'],request()->getRealIp(),json_encode($extend));
+            $_param = [
+                'id' => $extend['id'],
+                'ip' => request()->getRealIp(),
+                'extend' => json_encode($extend),
+                'cache_token_ttl' => $config['cache_token_ttl'],
+                'cache_token_pre' => $config['cache_token_pre']
+            ];
+            RedisHandler::generateToken($_param);
         }
         $resPayLoad['accessPayload'] = $basePayload;
         $basePayload['exp'] = time() + $config['refresh_exp'];
