@@ -4,9 +4,10 @@
   "type": "library",
   "license": "MIT",
   "require": {
+    "ext-json": "*",
     "workerman/webman-framework": "^1.2.1",
     "firebase/php-jwt": "^6.0",
-    "ext-json": "*"
+    "workerman/redis": "^1.0"
   },
   "autoload": {
     "psr-4": {

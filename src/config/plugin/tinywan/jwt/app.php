@@ -19,6 +19,11 @@ return [
         'iat' => time(),
         // 时钟偏差冗余时间，单位秒。建议这个余地应该不大于几分钟。
         'leeway' => 60,
+        // 单设备登录
+        'is_single_device' => false,
+        'device_config' => [
+
+        ],
 
         /**
          * access令牌私钥

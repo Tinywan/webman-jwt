@@ -102,7 +102,7 @@ class JwtToken
      */
     public static function generateToken(array $extend): array
     {
-        $config = self::_getConfig($extend);
+        $config = self::_getConfig();
         $payload = self::generatePayload($config, $extend);
         $secretKey = self::getPrivateKey($config);
         $accessToken = self::makeToken($payload['accessPayload'], $secretKey, $config['algorithms']);
@@ -200,10 +200,12 @@ class JwtToken
         $publicKey = self::ACCESS_TOKEN == $tokenType ? self::getPublicKey($config['algorithms']) : self::getPublicKey($config['algorithms'], self::REFRESH_TOKEN);
         JWT::$leeway = 60;
 
-        // return type is stdClass
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
-        // cast to array
-        return json_decode(json_encode($decoded), true);
+        $res = json_decode(json_encode($decoded), true);
+        if ($config['is_single_device']) {
+            RedisHandler::verifyeCacheToken($res['extend']['id'] ?? 2022,request()->getRealIp());
+        }
+        return $res;
     }
 
     /**
@@ -232,9 +234,11 @@ class JwtToken
             'iss' => $config['iss'],
             'iat' => time(),
             'exp' => time() + $config['access_exp'],
-            'extend' => $extend,
+            'extend' => $extend
         ];
-
+        if ($config['is_single_device']) {
+            RedisHandler::generateCacheToken($extend['id'],request()->getRealIp(),json_encode($extend));
+        }
         $resPayLoad['accessPayload'] = $basePayload;
         $basePayload['exp'] = time() + $config['refresh_exp'];
         $resPayLoad['refreshPayload'] = $basePayload;
@@ -292,11 +296,10 @@ class JwtToken
 
     /**
      * 获取配置文件
-     * @param $extend $config
      * @return array
      * @throws JwtConfigException
      */
-    private static function _getConfig(array $extend = []): array
+    private static function _getConfig(): array
     {
         $config = config('plugin.tinywan.jwt.app.jwt');
         if (empty($config)) {
