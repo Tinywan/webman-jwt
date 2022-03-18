@@ -103,6 +103,9 @@ class JwtToken
      */
     public static function generateToken(array $extend): array
     {
+        if (!isset($extend['id'])) {
+            throw new JwtTokenException('缺少全局唯一字段：id');
+        }
         $config = self::_getConfig();
         $payload = self::generatePayload($config, $extend);
         $secretKey = self::getPrivateKey($config);
@@ -127,7 +130,7 @@ class JwtToken
      * @throws JwtTokenException
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function verify(string $token = null, int $tokenType = self::ACCESS_TOKEN)
+    public static function verify(string $token = null, int $tokenType = self::ACCESS_TOKEN): array
     {
         $token = $token ?? self::getTokenFromHeaders();
         try {
@@ -199,14 +202,14 @@ class JwtToken
     {
         $config = self::_getConfig();
         $publicKey = self::ACCESS_TOKEN == $tokenType ? self::getPublicKey($config['algorithms']) : self::getPublicKey($config['algorithms'], self::REFRESH_TOKEN);
-        JWT::$leeway = 60;
+        JWT::$leeway = $config['leeway'];
 
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
-        $res = json_decode(json_encode($decoded), true);
+        $token = json_decode(json_encode($decoded), true);
         if ($config['is_single_device']) {
-            RedisHandler::verifyToken($config['cache_token_pre'], (string) $res['extend']['id'] ?? 2022, request()->getRealIp());
+            RedisHandler::verifyToken($config['cache_token_pre'], (string) $token['extend']['id'], request()->getRealIp());
         }
-        return $res;
+        return $token;
     }
 
     /**
@@ -238,14 +241,13 @@ class JwtToken
             'extend' => $extend
         ];
         if ($config['is_single_device']) {
-            $_param = [
+            RedisHandler::generateToken([
                 'id' => $extend['id'],
                 'ip' => request()->getRealIp(),
                 'extend' => json_encode($extend),
                 'cache_token_ttl' => $config['cache_token_ttl'],
                 'cache_token_pre' => $config['cache_token_pre']
-            ];
-            RedisHandler::generateToken($_param);
+            ]);
         }
         $resPayLoad['accessPayload'] = $basePayload;
         $basePayload['exp'] = time() + $config['refresh_exp'];
