@@ -1,14 +1,15 @@
 <?php
+
 namespace Tinywan\Jwt;
 
 class Install
 {
-    const WEBMAN_PLUGIN = true;
+    public const WEBMAN_PLUGIN = true;
 
     /**
      * @var array
      */
-    protected static $pathRelation = array (
+    protected static $pathRelation = array(
   'config/plugin/tinywan/jwt' => 'config/plugin/tinywan/jwt',
 );
 
@@ -65,5 +66,4 @@ class Install
             remove_dir($path);
         }
     }
-    
 }

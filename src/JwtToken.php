@@ -188,20 +188,22 @@ class JwtToken
     }
 
     /**
-     * 校验令牌.
+     * @desc: 校验令牌
      * @param string $token
      * @param int $tokenType
      * @return array
-     * @throws JwtConfigException
+     * @author Tinywan(ShaoBo Wan)
      */
     private static function verifyToken(string $token, int $tokenType): array
     {
         $config = self::_getConfig();
-        $secretKey = self::ACCESS_TOKEN == $tokenType ? self::getPublicKey($config['algorithms']) : self::getPublicKey($config['algorithms'], self::REFRESH_TOKEN);
+        $publicKey = self::ACCESS_TOKEN == $tokenType ? self::getPublicKey($config['algorithms']) : self::getPublicKey($config['algorithms'], self::REFRESH_TOKEN);
         JWT::$leeway = 60;
 
-        // v5.5.1 return (array) JWT::decode($token, $secretKey, [$config['algorithms']]);
-        return (array) JWT::decode($token,new Key($secretKey, $config['algorithms']));
+        // return type is stdClass
+        $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
+        // cast to array
+        return json_decode(json_encode($decoded), true);
     }
 
     /**
