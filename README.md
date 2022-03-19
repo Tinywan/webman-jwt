@@ -15,15 +15,13 @@ JWT的声明一般被用来在身份提供者和服务提供者间传递被认�
 
 ## 签名流程
 
-> 1. 用户使用用户名和口令到认证服务器上请求认证。
-> 2. 认证服务器验证用户名和口令后，以服务器端生成JWT Token，这个token的生成过程如下：
-	- 认证服务器还会生成一个 Secret Key（密钥）
-	- 对JWT Header和JWT Payload分别求Base64。在Payload可能包括了用户的抽象ID和的过期时间。
-	- 用密钥对JWT签名 `HMAC-SHA256(SecertKey, Base64UrlEncode(JWT-Header)+'.'+Base64UrlEncode(JWT-Payload))`
-	
-> 3. 然后把 base64(header).base64(payload).signature 作为 JWT token返回客户端。
-
-> 4. 客户端使用JWT Token向应用服务器发送相关的请求。这个JWT Token就像一个临时用户权证一样。
+1. 用户使用用户名和口令到认证服务器上请求认证。
+2. 认证服务器验证用户名和口令后，以服务器端生成JWT Token，这个token的生成过程如下：
+  	- 认证服务器还会生成一个 Secret Key（密钥）
+ 	- 对JWT Header和JWT Payload分别求Base64。在Payload可能包括了用户的抽象ID和的过期时间。
+  	- 用密钥对JWT签名 `HMAC-SHA256(SecertKey, Base64UrlEncode(JWT-Header)+'.'+Base64UrlEncode(JWT-Payload))`	
+3. 然后把 base64(header).base64(payload).signature 作为 JWT token返回客户端。
+4. 客户端使用JWT Token向应用服务器发送相关的请求。这个JWT Token就像一个临时用户权证一样。
 
 ## 安装
 
