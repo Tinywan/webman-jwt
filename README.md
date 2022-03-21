@@ -82,9 +82,56 @@ $email = JwtToken::getExtendVal('email');
 $refreshToken = JwtToken::refreshToken();
 ```
 
-## 加密算法
+## 签名算法
 
-> Generate RS512, RS384 and RS256 keys
+JWT 最常见的几种签名算法(JWA)：`HS256(HMAC-SHA256)` 、`RS256(RSA-SHA256)` 还有 `ES256(ECDSA-SHA256)`
+
+**JWT 算法列表如下**
+```
++--------------+-------------------------------+--------------------+
+   | "alg" Param  | Digital Signature or MAC      | Implementation     |
+   | Value        | Algorithm                     | Requirements       |
+   +--------------+-------------------------------+--------------------+
+   | HS256        | HMAC using SHA-256            | Required           |
+   | HS384        | HMAC using SHA-384            | Optional           |
+   | HS512        | HMAC using SHA-512            | Optional           |
+   | RS256        | RSASSA-PKCS1-v1_5 using       | Recommended        |
+   |              | SHA-256                       |                    |
+   | RS384        | RSASSA-PKCS1-v1_5 using       | Optional           |
+   |              | SHA-384                       |                    |
+   | RS512        | RSASSA-PKCS1-v1_5 using       | Optional           |
+   |              | SHA-512                       |                    |
+   | ES256        | ECDSA using P-256 and SHA-256 | Recommended+       |
+   | ES384        | ECDSA using P-384 and SHA-384 | Optional           |
+   | ES512        | ECDSA using P-521 and SHA-512 | Optional           |
+   | PS256        | RSASSA-PSS using SHA-256 and  | Optional           |
+   |              | MGF1 with SHA-256             |                    |
+   | PS384        | RSASSA-PSS using SHA-384 and  | Optional           |
+   |              | MGF1 with SHA-384             |                    |
+   | PS512        | RSASSA-PSS using SHA-512 and  | Optional           |
+   |              | MGF1 with SHA-512             |                    |
+   | none         | No digital signature or MAC   | Optional           |
+   |              | performed                     |                    |
+   +--------------+-------------------------------+--------------------+
+
+   The use of "+" in the Implementation Requirements column indicates
+   that the requirement strength is likely to be increased in a future
+   version of the specification.
+```
+> 可以看到被标记为 Recommended 的只有 RS256 和 ES256。
+### 对称加密算法
+
+> 插件安装默认使用`HS256 `对称加密算法。
+
+HS256 使用同一个`「secret_key」`进行签名与验证。一旦 `secret_key `泄漏，就毫无安全性可言了。因此 HS256 只适合集中式认证，签名和验证都必须由可信方进行。
+
+### 非对称加密算法
+
+> RS256 系列是使用 RSA 私钥进行签名，使用 RSA 公钥进行验证。
+
+公钥即使泄漏也毫无影响，只要确保私钥安全就行。RS256 可以将验证委托给其他应用，只要将公钥给他们就行。
+
+> 以下为RS系列算法生成命令，仅供参考
 
 ### RS512
 
@@ -109,7 +156,7 @@ openssl rsa -in RS256.key -pubout -outform PEM -out RS256.key.pub
 
 ## 🚀 视频地址
 
-不懂的同学可以了解一下视频，会有详细的说明哦
+> 不懂的同学可以了解一下视频，会有详细的说明哦
 
 - 如何使用 JWT 认证插件：https://www.bilibili.com/video/BV1HS4y1F7Jx
 - 如何使用 JWT 认证插件（算法篇）：https://www.bilibili.com/video/BV14L4y1g7sY
