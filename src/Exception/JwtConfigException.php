@@ -14,22 +14,5 @@ use function implode;
 
 class JwtConfigException extends \RuntimeException
 {
-    protected $error;
 
-    public function __construct($error)
-    {
-        parent::__construct();
-        $this->error   = $error;
-        $this->message = is_array($error) ? implode(PHP_EOL, $error) : $error;
-    }
-
-    /**
-     * 获取验证错误信息
-     * @access public
-     * @return array|string
-     */
-    public function getError()
-    {
-        return $this->error;
-    }
 }

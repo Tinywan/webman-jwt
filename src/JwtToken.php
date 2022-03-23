@@ -234,12 +234,6 @@ class JwtToken
      */
     private static function generatePayload(array $config, array $extend): array
     {
-        $basePayload = [
-            'iss' => $config['iss'],
-            'iat' => time(),
-            'exp' => time() + $config['access_exp'],
-            'extend' => $extend
-        ];
         if ($config['is_single_device']) {
             RedisHandler::generateToken([
                 'id' => $extend['id'],
@@ -249,6 +243,12 @@ class JwtToken
                 'cache_token_pre' => $config['cache_token_pre']
             ]);
         }
+        $basePayload = [
+            'iss' => $config['iss'],
+            'iat' => time(),
+            'exp' => time() + $config['access_exp'],
+            'extend' => $extend
+        ];
         $resPayLoad['accessPayload'] = $basePayload;
         $basePayload['exp'] = time() + $config['refresh_exp'];
         $resPayLoad['refreshPayload'] = $basePayload;
