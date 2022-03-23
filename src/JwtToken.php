@@ -33,11 +33,11 @@ class JwtToken
 
     /**
      * @desc: 获取当前登录ID
-     * @return int
      * @throws JwtTokenException
+     * @return mixed
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function getCurrentId(): int
+    public static function getCurrentId()
     {
         return self::getExtendVal('id') ?? 0;
     }
