@@ -6,7 +6,7 @@
   "require": {
     "ext-json": "*",
     "workerman/webman-framework": "^1.2.1",
-    "firebase/php-jwt": "^6.0"
+    "firebase/php-jwt": "^6.1"
   },
   "autoload": {
     "psr-4": {
