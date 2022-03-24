@@ -124,13 +124,13 @@ class JwtToken
 
     /**
      * @desc: 验证令牌
-     * @param string|null $token
      * @param int $tokenType
+     * @param string|null $token
      * @return array
      * @throws JwtTokenException
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function verify(string $token = null, int $tokenType = self::ACCESS_TOKEN): array
+    public static function verify(int $tokenType = self::ACCESS_TOKEN, string $token = null): array
     {
         $token = $token ?? self::getTokenFromHeaders();
         try {
@@ -150,14 +150,22 @@ class JwtToken
 
     /**
      * 获取扩展字段.
-     * @param string|null $token
-     * @param int $tokenType
      * @return array
      * @throws JwtTokenException
      */
-    private static function getTokenExtend(string $token = null, int $tokenType = self::ACCESS_TOKEN): array
+    private static function getTokenExtend(): array
     {
-        return (array) self::verify($token, $tokenType)['extend'];
+        return (array) self::verify()['extend'];
+    }
+
+    /**
+     * 获令牌有效期剩余时长.
+     * @return int
+     * @throws JwtTokenException
+     */
+    public static function getTokenExp(int $tokenType = self::ACCESS_TOKEN): int
+    {
+        return (int) self::verify($tokenType)['exp'] - time();
     }
 
     /**

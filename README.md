@@ -64,22 +64,36 @@ var_dump(json_encode($token));
 |access_token| string |访问凭证 | XXXXXXXXXXXXXXXXXXXX|
 |refresh_token| string | 刷新凭证（访问凭证过期使用 ） | XXXXXXXXXXXXXXXXXXX|
 
-### 获取当前uid
+## 支持函数列表
+
+> 1、获取当前`uid`
 
 ```php
 $uid = JwtToken::getCurrentId();
 ```
 
-### 获取其他自定义字段
+> 2、获取所有字段
+
+```php
+$email = JwtToken::getExtend();
+```
+
+> 3、获取自定义字段
 
 ```php
 $email = JwtToken::getExtendVal('email');
 ```
 
-### 刷新令牌
+> 4、刷新令牌（通过刷新令牌获取访问令牌）
 
 ```php
 $refreshToken = JwtToken::refreshToken();
+```
+
+> 5、获令牌有效期剩余时长
+
+```php
+$exp = JwtToken::getTokenExp();
 ```
 
 ## 签名算法

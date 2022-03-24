@@ -14,5 +14,4 @@ use function implode;
 
 class JwtConfigException extends \RuntimeException
 {
-
 }
