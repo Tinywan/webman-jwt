@@ -15,8 +15,10 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
 use Tinywan\Jwt\Exception\JwtCacheTokenException;
+use Tinywan\Jwt\Exception\JwtRefreshTokenExpiredException;
 use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
+use Tinywan\Jwt\Exception\JwtTokenExpiredException;
 use UnexpectedValueException;
 
 class JwtToken
@@ -82,7 +84,7 @@ class JwtToken
         } catch (BeforeValidException $beforeValidException) {
             throw new JwtTokenException('刷新令牌尚未生效');
         } catch (ExpiredException $expiredException) {
-            throw new JwtTokenException('刷新令牌会话已过期，请再次登录！');
+            throw new JwtRefreshTokenExpiredException('刷新令牌会话已过期，请再次登录！');
         } catch (UnexpectedValueException $unexpectedValueException) {
             throw new JwtTokenException('刷新令牌获取的扩展字段不存在');
         } catch (JwtCacheTokenException | \Exception $exception) {
@@ -140,7 +142,7 @@ class JwtToken
         } catch (BeforeValidException $beforeValidException) {
             throw new JwtTokenException('身份验证令牌尚未生效');
         } catch (ExpiredException $expiredException) {
-            throw new JwtTokenException('身份验证会话已过期，请重新登录！');
+            throw new JwtTokenExpiredException('身份验证会话已过期，请重新登录！');
         } catch (UnexpectedValueException $unexpectedValueException) {
             throw new JwtTokenException('获取的扩展字段不存在');
         } catch (JwtCacheTokenException | \Exception $exception) {

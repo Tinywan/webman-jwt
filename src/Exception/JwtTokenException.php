@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt\Exception;
 
-use function is_array;
-use function implode;
-
 class JwtTokenException extends \RuntimeException
 {
 }
