@@ -162,8 +162,8 @@ class JwtToken
 
     /**
      * 获令牌有效期剩余时长.
+     * @param int $tokenType
      * @return int
-     * @throws JwtTokenException
      */
     public static function getTokenExp(int $tokenType = self::ACCESS_TOKEN): int
     {
