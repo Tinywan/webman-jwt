@@ -177,7 +177,10 @@ openssl rsa -in RS256.key -pubout -outform PEM -out RS256.key.pub
 
 ## 安全性
 
+https://www.w3cschool.cn/fastapi/fastapi-cmia3lcw.html
+
 ### 概念
+
 有许多方法可以处理安全性、身份认证和授权等问题。而且这通常是一个复杂而「困难」的话题。在许多框架和系统中，仅处理安全性和身份认证就会花费大量的精力和代码（在许多情况下，可能占编写的所有代码的 50％ 或更多）。
 
 Jwt 可帮助你以标准的方式轻松、快速地处理安全性，而无需研究和学习所有的安全规范。
