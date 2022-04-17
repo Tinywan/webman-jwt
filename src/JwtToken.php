@@ -111,17 +111,16 @@ class JwtToken
         $config = self::_getConfig();
         $payload = self::generatePayload($config, $extend);
         $secretKey = self::getPrivateKey($config);
-        $accessToken = self::makeToken($payload['accessPayload'], $secretKey, $config['algorithms']);
-
-        $refreshSecretKey = self::getPrivateKey($config, self::REFRESH_TOKEN);
-        $refreshToken = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
-
-        return [
+        $token = [
             'token_type' => 'Bearer',
             'expires_in' => $config['access_exp'],
-            'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
+            'access_token' => self::makeToken($payload['accessPayload'], $secretKey, $config['algorithms'])
         ];
+        if (!isset($config['refresh_disable']) || (isset($config['refresh_disable']) && $config['refresh_disable'] === false)) {
+            $refreshSecretKey = self::getPrivateKey($config, self::REFRESH_TOKEN);
+            $token['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
+        }
+        return $token;
     }
 
     /**

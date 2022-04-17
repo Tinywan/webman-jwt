@@ -13,6 +13,8 @@ return [
         'refresh_secret_key' => '2022KTxigxc9o50c',
         // refresh令牌过期时间，单位：秒。默认 7 天
         'refresh_exp' => 604800,
+        // refresh 令牌是否禁用，默认不禁用 false
+        'refresh_disable' => false,
         // 令牌签发者
         'iss' => 'webman.tinywan.cn',
         // 令牌签发时间
