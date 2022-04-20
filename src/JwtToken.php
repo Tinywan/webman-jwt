@@ -49,7 +49,7 @@ class JwtToken
      * @return mixed
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function getCurrentUser()
+    public static function getUser()
     {
         $config = self::_getConfig();
         if (is_callable($config['user_model'])) {

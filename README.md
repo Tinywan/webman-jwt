@@ -70,31 +70,65 @@ var_dump(json_encode($token));
 > 1、获取当前`uid`
 
 ```php
-$uid = JwtToken::getCurrentId();
+$uid = Tinywan\Jwt\JwtToken::getCurrentId();
 ```
 
 > 2、获取所有字段
 
 ```php
-$email = JwtToken::getExtend();
+$email = Tinywan\Jwt\JwtToken::getExtend();
 ```
 
 > 3、获取自定义字段
 
 ```php
-$email = JwtToken::getExtendVal('email');
+$email = Tinywan\Jwt\JwtToken::getExtendVal('email');
 ```
 
 > 4、刷新令牌（通过刷新令牌获取访问令牌）
 
 ```php
-$refreshToken = JwtToken::refreshToken();
+$refreshToken = Tinywan\Jwt\JwtToken::refreshToken();
 ```
 
 > 5、获令牌有效期剩余时长
 
 ```php
-$exp = JwtToken::getTokenExp();
+$exp = Tinywan\Jwt\JwtToken::getTokenExp();
+```
+> 6、单设备登录。默认是关闭，开启请修改配置文件`config/plugin/tinywan/jwt`
+
+```php
+'is_single_device' => true,
+```
+> 7、获取当前用户信息（模型）
+
+```php
+$user = Tinywan\Jwt\JwtToken::getUser();
+```
+该配置项目`'user_model'`为一个匿名函数，默认返回空数组，可以根据自己项目ORM定制化自己的返回模型
+
+**ThinkORM** 配置
+```php
+'user_model' => function($uid){
+	// 返回一个数组
+	return \think\facade\Db::table('resty_user')
+		->field('id,username,create_time')
+		->where('id',$uid)
+		->find();
+}
+```
+
+**LaravelORM** 配置
+
+```php
+'user_model' => function($uid){
+	// 返回一个对象
+	return \support\Db::table('resty_user')
+		->where('id', $uid)
+		->select('id','email','mobile','create_time')
+		->first();
+}
 ```
 
 ## 签名算法
