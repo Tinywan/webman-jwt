@@ -27,6 +27,21 @@ return [
         'cache_token_ttl' => 604800,
         // 缓存令牌前缀
         'cache_token_pre' => 'JWT:TOKEN:',
+        // 用户信息模型
+        'user_model' => function($uid){
+            // ThinkORM
+            // return \think\facade\Db::table('resty_user')
+            //    ->field('id,username,create_time')
+            //    ->where('id',$uid)
+            //    ->find();
+
+            // LaravelORM
+            // return \support\Db::table('resty_user')
+            //    ->where('id', $uid)
+            //    ->select('id','email','mobile','create_time')
+            //    ->first();
+            return [];
+        },
 
         /**
          * access令牌私钥

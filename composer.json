@@ -25,6 +25,8 @@
     "friendsofphp/php-cs-fixer": "^3.6",
     "phpstan/phpstan": "^1.4",
     "mockery/mockery": "^1.5",
-    "vimeo/psalm": "^4.22"
+    "vimeo/psalm": "^4.22",
+    "topthink/think-orm": "^2.0",
+    "illuminate/database": "^8.83"
   }
 }

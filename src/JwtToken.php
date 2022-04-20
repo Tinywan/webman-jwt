@@ -45,6 +45,20 @@ class JwtToken
     }
 
     /**
+     * @desc: 获取当前用户信息
+     * @return mixed
+     * @author Tinywan(ShaoBo Wan)
+     */
+    public static function getCurrentUser()
+    {
+        $config = self::_getConfig();
+        if (is_callable($config['user_model'])) {
+            return $config['user_model'](self::getCurrentId()) ?? [];
+        }
+        return [];
+    }
+
+    /**
      * @desc: 获取指定令牌扩展内容字段的值
      *
      * @param string $val
@@ -98,7 +112,7 @@ class JwtToken
     }
 
     /**
-     * 生成令牌.
+     * @desc: 生成令牌.
      * @param array $extend
      * @return array
      * @throws JwtConfigException
@@ -150,7 +164,7 @@ class JwtToken
     }
 
     /**
-     * 获取扩展字段.
+     * @desc: 获取扩展字段.
      * @return array
      * @throws JwtTokenException
      */
@@ -160,7 +174,7 @@ class JwtToken
     }
 
     /**
-     * 获令牌有效期剩余时长.
+     * @desc: 获令牌有效期剩余时长.
      * @param int $tokenType
      * @return int
      */
@@ -222,7 +236,7 @@ class JwtToken
     }
 
     /**
-     * 生成令牌.
+     * @desc: 生成令牌.
      *
      * @param array  $payload    载荷信息
      * @param string $secretKey  签名key
@@ -235,7 +249,7 @@ class JwtToken
     }
 
     /**
-     * 获取加密载体.
+     * @desc: 获取加密载体.
      *
      * @param array $config 配置文件
      * @param array $extend 扩展加密字段
@@ -266,7 +280,7 @@ class JwtToken
     }
 
     /**
-     * 根据签名算法获取【公钥】签名值
+     * @desc: 根据签名算法获取【公钥】签名值
      * @param string $algorithm 算法
      * @param int $tokenType 类型
      * @return string
@@ -291,7 +305,7 @@ class JwtToken
     }
 
     /**
-     * 根据签名算法获取【私钥】签名值
+     * @desc: 根据签名算法获取【私钥】签名值
      * @param array $config 配置文件
      * @param int $tokenType 令牌类型
      * @return string
@@ -314,7 +328,7 @@ class JwtToken
     }
 
     /**
-     * 获取配置文件
+     * @desc: 获取配置文件
      * @return array
      * @throws JwtConfigException
      */
