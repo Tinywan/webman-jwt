@@ -110,24 +110,24 @@ $user = Tinywan\Jwt\JwtToken::getUser();
 
 **ThinkORM** 配置
 ```php
-'user_model' => function($uid){
-	// 返回一个数组
-	return \think\facade\Db::table('resty_user')
-		->field('id,username,create_time')
-		->where('id',$uid)
-		->find();
+'user_model' => function($uid) {
+// 返回一个数组
+return \think\facade\Db::table('resty_user')
+	->field('id,username,create_time')
+	->where('id',$uid)
+	->find();
 }
 ```
 
 **LaravelORM** 配置
 
 ```php
-'user_model' => function($uid){
-	// 返回一个对象
-	return \support\Db::table('resty_user')
-		->where('id', $uid)
-		->select('id','email','mobile','create_time')
-		->first();
+'user_model' => function($uid) {
+// 返回一个对象
+return \support\Db::table('resty_user')
+	->where('id', $uid)
+	->select('id','email','mobile','create_time')
+	->first();
 }
 ```
 
