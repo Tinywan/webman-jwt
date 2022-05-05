@@ -104,7 +104,7 @@ class JwtToken
         } catch (JwtCacheTokenException | \Exception $exception) {
             throw new JwtTokenException($exception->getMessage());
         }
-        $tokenPayload['exp'] = $tokenPayload['exp'] + $config['access_exp'];
+        $tokenPayload['exp'] = time() + $config['access_exp'];
         $secretKey = self::getPrivateKey($config);
         $token = self::makeToken($tokenPayload, $secretKey, $config['algorithms']);
 
