@@ -226,9 +226,9 @@ Jwt 可帮助你以标准的方式轻松、快速地处理安全性，而无需�
 
 ### 认证流程
 
-- 用户在前端输入username和password，然后点击Enter。
-- 前端（在用户的浏览器中运行）发送一个username和password我们的API在一个特定的URL（以申报tokenUrl="token"）。
+- 用户在前端输入`username`和`password`，然后点击Enter。
+- 前端（在用户的浏览器中运行）发送一个`username`和`password`我们的API在一个特定的URL（以申报`tokenUrl="token"`）。
 - API 检查username和password，并用“令牌”响应（我们还没有实现任何这些）。“令牌”只是一个包含一些内容的字符串，我们稍后可以使用它来验证此用户。通常，令牌设置为在一段时间后过期。因此，用户稍后将不得不再次登录。如果代币被盗，风险就小了。它不像一个永久有效的密钥（在大多数情况下）。
 前端将该令牌临时存储在某处。
 - 用户单击前端以转到前端 Web 应用程序的另一部分。
-- 前端需要从 API 获取更多数据。但它需要对该特定端点进行身份验证。因此，为了使用我们的 API 进行身份验证，它会发送Authorization一个值为Bearer加上令牌的标头。如果令牌包含foobar，则Authorization标头的内容将为：Bearer foobar。
+- 前端需要从 API 获取更多数据。但它需要对该特定端点进行身份验证。因此，为了使用我们的 API 进行身份验证，它会发送`Authorization`一个值为`Bearer`加上令牌的标头。如果令牌包含`foobar`，则`Authorization`标头的内容将为：`Bearer foobar`。`注意：中间是有个空格`。
