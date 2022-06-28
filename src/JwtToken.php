@@ -92,7 +92,7 @@ class JwtToken
         $token = self::getTokenFromHeaders();
         $config = self::_getConfig();
         try {
-            $tokenPayload = self::verifyToken($token, self::REFRESH_TOKEN);
+            $extend = self::verifyToken($token, self::REFRESH_TOKEN);
         } catch (SignatureInvalidException $signatureInvalidException) {
             throw new JwtTokenException('刷新令牌无效');
         } catch (BeforeValidException $beforeValidException) {
@@ -104,11 +104,16 @@ class JwtToken
         } catch (JwtCacheTokenException | \Exception $exception) {
             throw new JwtTokenException($exception->getMessage());
         }
-        $tokenPayload['exp'] = time() + $config['access_exp'];
+        $extend['exp'] = time() + $config['access_exp'];
+        $payload = self::generatePayload($config, $extend);
         $secretKey = self::getPrivateKey($config);
-        $token = self::makeToken($tokenPayload, $secretKey, $config['algorithms']);
-
-        return ['access_token' => $token];
+        $newToken['access_token'] = self::makeToken($extend, $secretKey, $config['algorithms']);
+        if (!isset($config['refresh_disable']) || (isset($config['refresh_disable']) && $config['refresh_disable'] === false)) {
+            $refreshSecretKey = self::getPrivateKey($config, self::REFRESH_TOKEN);
+            $payload['exp'] = time() + $config['refresh_exp'];
+            $newToken['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
+        }
+        return $newToken;
     }
 
     /**
