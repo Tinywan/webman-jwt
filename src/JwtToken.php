@@ -123,6 +123,8 @@ class JwtToken
             throw new JwtTokenException('缺少全局唯一字段：id');
         }
         $config = self::_getConfig();
+        $config['access_exp'] = $extend['access_exp'] ?? $config['access_exp'];
+        $config['refresh_exp'] = $extend['refresh_exp'] ?? $config['refresh_exp'];
         $payload = self::generatePayload($config, $extend);
         $secretKey = self::getPrivateKey($config);
         $token = [
