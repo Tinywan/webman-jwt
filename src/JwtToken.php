@@ -104,9 +104,9 @@ class JwtToken
         } catch (JwtCacheTokenException | \Exception $exception) {
             throw new JwtTokenException($exception->getMessage());
         }
-        $extend['exp'] = time() + $config['access_exp'];
-        $payload = self::generatePayload($config, $extend);
+        $payload = self::generatePayload($config, $extend['extend']);
         $secretKey = self::getPrivateKey($config);
+        $extend['exp'] = time() + $config['access_exp'];
         $newToken['access_token'] = self::makeToken($extend, $secretKey, $config['algorithms']);
         if (!isset($config['refresh_disable']) || (isset($config['refresh_disable']) && $config['refresh_disable'] === false)) {
             $refreshSecretKey = self::getPrivateKey($config, self::REFRESH_TOKEN);
