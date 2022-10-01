@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc JwtToken.php 描述信息
  * @author Tinywan(ShaoBo Wan)
@@ -141,6 +142,14 @@ class JwtToken
             $refreshSecretKey = self::getPrivateKey($config, self::REFRESH_TOKEN);
             $token['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
+        if ($config['is_single_device']) {
+            RedisHandler::generateToken([
+                'id' => $extend['id'],
+                'access_token' => $token['access_token'],
+                'cache_token_ttl' => $config['cache_token_ttl'],
+                'cache_token_pre' => $config['cache_token_pre']
+            ]);
+        }
         return $token;
     }
 
@@ -235,11 +244,11 @@ class JwtToken
         JWT::$leeway = $config['leeway'];
 
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
-        $token = json_decode(json_encode($decoded), true);
+        $decodeToken = json_decode(json_encode($decoded), true);
         if ($config['is_single_device']) {
-            RedisHandler::verifyToken($config['cache_token_pre'], (string) $token['extend']['id'], request()->getRealIp());
+            RedisHandler::verifyToken($config['cache_token_pre'], (string) $decodeToken['extend']['id'], $token);
         }
-        return $token;
+        return $decodeToken;
     }
 
     /**
@@ -264,15 +273,6 @@ class JwtToken
      */
     private static function generatePayload(array $config, array $extend): array
     {
-        if ($config['is_single_device']) {
-            RedisHandler::generateToken([
-                'id' => $extend['id'],
-                'ip' => request()->getRealIp(),
-                'extend' => json_encode($extend),
-                'cache_token_ttl' => $config['cache_token_ttl'],
-                'cache_token_pre' => $config['cache_token_pre']
-            ]);
-        }
         $basePayload = [
             'iss' => $config['iss'],
             'iat' => time(),
