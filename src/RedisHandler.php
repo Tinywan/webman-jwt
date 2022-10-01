@@ -29,7 +29,7 @@ class RedisHandler
         if (!empty($key)) {
             Redis::del(current($key));
         }
-        Redis::setex($cacheKey . ':' . $args['ip'], $args['cache_token_ttl'], $args['extend']);
+        Redis::setex($cacheKey . ':' . request()->getRealIp(), $args['cache_token_ttl'], $args['access_token']);
     }
 
     /**
