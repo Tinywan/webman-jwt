@@ -134,7 +134,7 @@ return \support\Db::table('resty_user')
 > 8、令牌清理
 
 ```php
-$user = Tinywan\Jwt\JwtToken::clear();
+$res = Tinywan\Jwt\JwtToken::clear();
 ```
 只有配置项 `is_single_device`为`true` 才会生效
 
