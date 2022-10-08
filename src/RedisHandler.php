@@ -51,4 +51,20 @@ class RedisHandler
         }
         return true;
     }
+
+    /**
+     * @desc: 清理缓存令牌
+     * @param string $pre
+     * @param string $uid
+     * @return bool
+     * @author Tinywan(ShaoBo Wan)
+     */
+    public static function clearToken(string $pre, string $uid): bool
+    {
+        $token = Redis::keys($pre . $uid . ':*');
+        if ($token) {
+            Redis::del(current($token));
+        }
+        return true;
+    }
 }

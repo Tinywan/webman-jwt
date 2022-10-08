@@ -347,4 +347,17 @@ class JwtToken
         }
         return $config;
     }
+
+    /**
+     * @desc: 注销令牌
+     * @return bool
+     */
+    public static function clear(): bool
+    {
+        $config = self::_getConfig();
+        if ($config['is_single_device']) {
+            return RedisHandler::clearToken($config['cache_token_pre'], self::getCurrentId());
+        }
+        return true;
+    }
 }
