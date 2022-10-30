@@ -39,7 +39,7 @@ composer require tinywan/jwt
 use Tinywan\Jwt\JwtToken;
 
 $user = [
-    'uid'  => 2022,
+    'id'  => 2022,
     'name'  => 'Tinywan',
     'email' => 'Tinywan@163.com'
 ];
@@ -68,10 +68,10 @@ var_dump(json_encode($token));
 
 ## 支持函数列表
 
-> 1、获取当前`uid`
+> 1、获取当前`id`
 
 ```php
-$uid = Tinywan\Jwt\JwtToken::getCurrentId();
+$id = Tinywan\Jwt\JwtToken::getCurrentId();
 ```
 
 > 2、获取所有字段
