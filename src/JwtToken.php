@@ -21,6 +21,7 @@ use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
 use Tinywan\Jwt\Exception\JwtTokenExpiredException;
 use UnexpectedValueException;
+use function _PHPStan_c0c409264\RingCentral\Psr7\str;
 
 class JwtToken
 {
@@ -356,7 +357,7 @@ class JwtToken
     {
         $config = self::_getConfig();
         if ($config['is_single_device']) {
-            return RedisHandler::clearToken($config['cache_token_pre'], self::getCurrentId());
+            return RedisHandler::clearToken($config['cache_token_pre'], (string) self::getCurrentId());
         }
         return true;
     }
