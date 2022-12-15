@@ -246,7 +246,7 @@ class JwtToken
 
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
         $decodeToken = json_decode(json_encode($decoded), true);
-        if ($config['is_single_device']) {
+        if ($config['is_single_device'] && self::ACCESS_TOKEN == $tokenType) {
             RedisHandler::verifyToken($config['cache_token_pre'], (string) $decodeToken['extend']['id'], $token);
         }
         return $decodeToken;
