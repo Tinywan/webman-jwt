@@ -115,6 +115,14 @@ class JwtToken
             $payload['exp'] = time() + $config['refresh_exp'];
             $newToken['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
+        if ($config['is_single_device']) {
+            RedisHandler::generateToken([
+                'id' => $extend['extend']['id'],
+                'access_token' => $newToken['access_token'],
+                'cache_token_ttl' => $extend['exp'],
+                'cache_token_pre' => $config['cache_token_pre']
+            ]);
+        }
         return $newToken;
     }
 
