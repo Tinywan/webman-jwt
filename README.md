@@ -1,10 +1,11 @@
 # JSON Web Token (JWT) for webman plugin
 
+[![License](http://poser.pugx.org/tinywan/jwt/license)](https://packagist.org/packages/tinywan/jwt) 
 [![Latest Stable Version](http://poser.pugx.org/tinywan/jwt/v)](https://packagist.org/packages/tinywan/jwt) 
 [![Total Downloads](http://poser.pugx.org/tinywan/jwt/downloads)](https://packagist.org/packages/tinywan/jwt)
+[![Monthly Downloads](http://poser.pugx.org/tinywan/jwt/d/monthly)](https://packagist.org/packages/tinywan/jwt)
 [![Daily Downloads](http://poser.pugx.org/tinywan/jwt/d/daily)](https://packagist.org/packages/tinywan/jwt)
 [![Latest Unstable Version](http://poser.pugx.org/tinywan/jwt/v/unstable)](https://packagist.org/packages/tinywan/jwt) 
-[![License](http://poser.pugx.org/tinywan/jwt/license)](https://packagist.org/packages/tinywan/jwt) 
 [![PHP Version Require](http://poser.pugx.org/tinywan/jwt/require/php)](https://packagist.org/packages/tinywan/jwt)
 
 > Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519).该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。
