@@ -146,36 +146,37 @@ JWT 最常见的几种签名算法(JWA)：`HS256(HMAC-SHA256)` 、`RS256(RSA-SHA
 
 ```php
 +--------------+-------------------------------+--------------------+
-   | "alg" Param  | Digital Signature or MAC      | Implementation     |
-   | Value        | Algorithm                     | Requirements       |
-   +--------------+-------------------------------+--------------------+
-   | HS256        | HMAC using SHA-256            | Required           |
-   | HS384        | HMAC using SHA-384            | Optional           |
-   | HS512        | HMAC using SHA-512            | Optional           |
-   | RS256        | RSASSA-PKCS1-v1_5 using       | Recommended        |
-   |              | SHA-256                       |                    |
-   | RS384        | RSASSA-PKCS1-v1_5 using       | Optional           |
-   |              | SHA-384                       |                    |
-   | RS512        | RSASSA-PKCS1-v1_5 using       | Optional           |
-   |              | SHA-512                       |                    |
-   | ES256        | ECDSA using P-256 and SHA-256 | Recommended+       |
-   | ES384        | ECDSA using P-384 and SHA-384 | Optional           |
-   | ES512        | ECDSA using P-521 and SHA-512 | Optional           |
-   | PS256        | RSASSA-PSS using SHA-256 and  | Optional           |
-   |              | MGF1 with SHA-256             |                    |
-   | PS384        | RSASSA-PSS using SHA-384 and  | Optional           |
-   |              | MGF1 with SHA-384             |                    |
-   | PS512        | RSASSA-PSS using SHA-512 and  | Optional           |
-   |              | MGF1 with SHA-512             |                    |
-   | none         | No digital signature or MAC   | Optional           |
-   |              | performed                     |                    |
-   +--------------+-------------------------------+--------------------+
+| "alg" Param  | Digital Signature or MAC      | Implementation     |
+| Value        | Algorithm                     | Requirements       |
++--------------+-------------------------------+--------------------+
+| HS256        | HMAC using SHA-256            | Required           |
+| HS384        | HMAC using SHA-384            | Optional           |
+| HS512        | HMAC using SHA-512            | Optional           |
+| RS256        | RSASSA-PKCS1-v1_5 using       | Recommended        |
+|              | SHA-256                       |                    |
+| RS384        | RSASSA-PKCS1-v1_5 using       | Optional           |
+|              | SHA-384                       |                    |
+| RS512        | RSASSA-PKCS1-v1_5 using       | Optional           |
+|              | SHA-512                       |                    |
+| ES256        | ECDSA using P-256 and SHA-256 | Recommended+       |
+| ES384        | ECDSA using P-384 and SHA-384 | Optional           |
+| ES512        | ECDSA using P-521 and SHA-512 | Optional           |
+| PS256        | RSASSA-PSS using SHA-256 and  | Optional           |
+|              | MGF1 with SHA-256             |                    |
+| PS384        | RSASSA-PSS using SHA-384 and  | Optional           |
+|              | MGF1 with SHA-384             |                    |
+| PS512        | RSASSA-PSS using SHA-512 and  | Optional           |
+|              | MGF1 with SHA-512             |                    |
+| none         | No digital signature or MAC   | Optional           |
+|              | performed                     |                    |
++--------------+-------------------------------+--------------------+
 
-   The use of "+" in the Implementation Requirements column indicates
-   that the requirement strength is likely to be increased in a future
-   version of the specification.
+The use of "+" in the Implementation Requirements column indicates
+that the requirement strength is likely to be increased in a future
+version of the specification.
 ```
 > 可以看到被标记为 Recommended 的只有 RS256 和 ES256。
+
 ### 对称加密算法
 
 > 插件安装默认使用`HS256 `对称加密算法。
