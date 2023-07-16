@@ -7,7 +7,7 @@
     "php": "^7.1||^8.0",
     "ext-json": "*",
     "workerman/webman-framework": "^1.2.1",
-    "firebase/php-jwt": "^6.1"
+    "firebase/php-jwt": "^6.8"
   },
   "autoload": {
     "psr-4": {
@@ -28,5 +28,11 @@
     "vimeo/psalm": "^4.22",
     "topthink/think-orm": "^2.0",
     "illuminate/database": "^8.83"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
   }
 }
