@@ -35,10 +35,14 @@ class JwtToken
      */
     private const REFRESH_TOKEN = 2;
 
+    public const TOKEN_CLIENT_WEB = 'WEB';
+
+    public const TOKEN_CLIENT_MOBILE = 'MOBILE';
+
     /**
      * @desc: 获取当前登录ID
-     * @throws JwtTokenException
      * @return mixed
+     * @throws JwtTokenException
      * @author Tinywan(ShaoBo Wan)
      */
     public static function getCurrentId()
@@ -116,12 +120,8 @@ class JwtToken
             $newToken['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
         if ($config['is_single_device']) {
-            RedisHandler::generateToken([
-                'id' => $extend['extend']['id'],
-                'access_token' => $newToken['access_token'],
-                'cache_token_ttl' => $extend['exp'],
-                'cache_token_pre' => $config['cache_token_pre']
-            ]);
+            $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
+            RedisHandler::generateToken($config['cache_token_pre'], $client, $extend['extend']['id'], $extend['exp'], $newToken['access_token']);
         }
         return $newToken;
     }
@@ -152,12 +152,8 @@ class JwtToken
             $token['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
         if ($config['is_single_device']) {
-            RedisHandler::generateToken([
-                'id' => $extend['id'],
-                'access_token' => $token['access_token'],
-                'cache_token_ttl' => $config['cache_token_ttl'],
-                'cache_token_pre' => $config['cache_token_pre']
-            ]);
+            $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
+            RedisHandler::generateToken($config['cache_token_pre'], $client, $extend['id'], $config['access_exp'], $token['access_token']);
         }
         return $token;
     }
@@ -195,7 +191,7 @@ class JwtToken
      */
     private static function getTokenExtend(): array
     {
-        return (array) self::verify()['extend'];
+        return (array)self::verify()['extend'];
     }
 
     /**
@@ -205,7 +201,7 @@ class JwtToken
      */
     public static function getTokenExp(int $tokenType = self::ACCESS_TOKEN): int
     {
-        return (int) self::verify($tokenType)['exp'] - time();
+        return (int)self::verify($tokenType)['exp'] - time();
     }
 
     /**
@@ -255,7 +251,8 @@ class JwtToken
         $decoded = JWT::decode($token, new Key($publicKey, $config['algorithms']));
         $decodeToken = json_decode(json_encode($decoded), true);
         if ($config['is_single_device'] && self::ACCESS_TOKEN == $tokenType) {
-            RedisHandler::verifyToken($config['cache_token_pre'], (string) $decodeToken['extend']['id'], $token);
+            $client = $decodeToken['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
+            RedisHandler::verifyToken($config['cache_token_pre'], $client, (string)$decodeToken['extend']['id'], $token);
         }
         return $decodeToken;
     }
@@ -263,8 +260,8 @@ class JwtToken
     /**
      * @desc: 生成令牌.
      *
-     * @param array  $payload    载荷信息
-     * @param string $secretKey  签名key
+     * @param array $payload 载荷信息
+     * @param string $secretKey 签名key
      * @param string $algorithms 算法
      * @return string
      */
@@ -361,13 +358,14 @@ class JwtToken
 
     /**
      * @desc: 注销令牌
+     * @param string $client
      * @return bool
      */
-    public static function clear(): bool
+    public static function clear(string $client = self::TOKEN_CLIENT_WEB): bool
     {
         $config = self::_getConfig();
         if ($config['is_single_device']) {
-            return RedisHandler::clearToken($config['cache_token_pre'], (string) self::getCurrentId());
+            return RedisHandler::clearToken($config['cache_token_pre'], $client, (string)self::getCurrentId());
         }
         return true;
     }
