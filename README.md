@@ -103,7 +103,7 @@ $exp = Tinywan\Jwt\JwtToken::getTokenExp();
 'is_single_device' => true,
 ```
 
-生成令牌可以指定客户端 `client` 字段，自定义客户端单点登录（默认为`WEB`，即网页端），如：`MOBILE`、`APP`、`WECHAT`、`WEB`、`ADMIN`、`API`、`OTHER`等等
+单设备登录支持定义客户端 `client` 字段，自定义客户端单点登录（默认为`WEB`，即网页端），如：`MOBILE`、`APP`、`WECHAT`、`WEB`、`ADMIN`、`API`、`OTHER`等等
 ```php
 $user = [
     'id'  => 2022,

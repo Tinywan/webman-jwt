@@ -121,7 +121,7 @@ class JwtToken
         }
         if ($config['is_single_device']) {
             $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'], $client, $extend['extend']['id'], $extend['exp'], $newToken['access_token']);
+            RedisHandler::generateToken($config['cache_token_pre'],  (string) $client,  (string) $extend['extend']['id'], $extend['exp'], $newToken['access_token']);
         }
         return $newToken;
     }
@@ -153,7 +153,7 @@ class JwtToken
         }
         if ($config['is_single_device']) {
             $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'], $client, $extend['id'], $config['access_exp'], $token['access_token']);
+            RedisHandler::generateToken($config['cache_token_pre'],  (string) $client,  (string) $extend['id'], $config['access_exp'], $token['access_token']);
         }
         return $token;
     }
