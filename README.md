@@ -150,6 +150,27 @@ $res = Tinywan\Jwt\JwtToken::clear();
 ```
 只有配置项 `is_single_device`为`true` 才会生效
 
+> 9、自定义终端`client`
+
+```php
+// 生成WEB令牌
+$user = [
+    'id'  => 2022,
+    'name'  => 'Tinywan',
+    'client' => JwtToken::TOKEN_CLIENT_WEB
+];
+$token = JwtToken::generateToken($user);
+
+// 生成移动端令牌
+$user = [
+    'id'  => 2022,
+    'name'  => 'Tinywan',
+    'client' => JwtToken::TOKEN_CLIENT_MOBILE
+];
+$token = JwtToken::generateToken($user);
+```
+> 默认是`WEB`端
+
 ## 签名算法
 
 JWT 最常见的几种签名算法(JWA)：`HS256(HMAC-SHA256)` 、`RS256(RSA-SHA256)` 还有 `ES256(ECDSA-SHA256)`
