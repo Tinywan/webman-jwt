@@ -68,42 +68,36 @@ var_dump(json_encode($token));
 
 ## 支持函数列表
 
-> 1、获取当前`id`
-
+1、获取当前`id`
 ```php
 $id = Tinywan\Jwt\JwtToken::getCurrentId();
 ```
 
-> 2、获取所有字段
-
+2、获取所有字段
 ```php
 $email = Tinywan\Jwt\JwtToken::getExtend();
 ```
 
-> 3、获取自定义字段
-
+3、获取自定义字段
 ```php
 $email = Tinywan\Jwt\JwtToken::getExtendVal('email');
 ```
 
-> 4、刷新令牌（通过刷新令牌获取访问令牌）
-
+4、刷新令牌（通过刷新令牌获取访问令牌）
 ```php
 $refreshToken = Tinywan\Jwt\JwtToken::refreshToken();
 ```
 
-> 5、获令牌有效期剩余时长
-
+5、获令牌有效期剩余时长
 ```php
 $exp = Tinywan\Jwt\JwtToken::getTokenExp();
 ```
-> 6、单设备登录。默认是关闭，开启请修改配置文件`config/plugin/tinywan/jwt`
 
+6、单设备登录。默认是关闭，开启请修改配置文件`config/plugin/tinywan/jwt`
 ```php
 'is_single_device' => true,
 ```
-
-单设备登录支持定义客户端 `client` 字段，自定义客户端单点登录（默认为`WEB`，即网页端），如：`MOBILE`、`APP`、`WECHAT`、`WEB`、`ADMIN`、`API`、`OTHER`等等
+> 单设备登录支持定义客户端 `client` 字段，自定义客户端单点登录（默认为`WEB`，即网页端），如：`MOBILE`、`APP`、`WECHAT`、`WEB`、`ADMIN`、`API`、`OTHER`等等
 ```php
 $user = [
     'id'  => 2022,
@@ -114,8 +108,7 @@ $token = Tinywan\Jwt\JwtToken::generateToken($user);
 var_dump(json_encode($token));
 ```
 
-> 7、获取当前用户信息（模型）
-
+7、获取当前用户信息（模型）
 ```php
 $user = Tinywan\Jwt\JwtToken::getUser();
 ```
@@ -143,15 +136,14 @@ return \support\Db::table('resty_user')
 	->first();
 }
 ```
-> 8、令牌清理
 
+8、令牌清理
 ```php
 $res = Tinywan\Jwt\JwtToken::clear();
 ```
-只有配置项 `is_single_device`为`true` 才会生效
+> 只有配置项 `is_single_device`为`true` 才会生效。可选参数：`MOBILE`、`APP`、`WECHAT`、`WEB`、`ADMIN`、`API`、`OTHER`等等
 
-> 9、自定义终端`client`
-
+9、自定义终端`client`
 ```php
 // 生成WEB令牌
 $user = [
