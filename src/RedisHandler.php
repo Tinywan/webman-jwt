@@ -67,7 +67,7 @@ class RedisHandler
      */
     public static function clearToken(string $pre, string $client, string $uid): bool
     {
-        $token = Redis::keys($pre . $client. ':'. $uid . '*');
+        $token = Redis::keys($pre . $client. ':'. $uid);
         if ($token) {
             Redis::del(current($token));
         }
