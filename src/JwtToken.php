@@ -21,7 +21,6 @@ use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
 use Tinywan\Jwt\Exception\JwtTokenExpiredException;
 use UnexpectedValueException;
-use function _PHPStan_c0c409264\RingCentral\Psr7\str;
 
 class JwtToken
 {
@@ -35,8 +34,10 @@ class JwtToken
      */
     private const REFRESH_TOKEN = 2;
 
+    /** WEB Client. */
     public const TOKEN_CLIENT_WEB = 'WEB';
 
+    /** Mobile Client. */
     public const TOKEN_CLIENT_MOBILE = 'MOBILE';
 
     /**
@@ -52,10 +53,10 @@ class JwtToken
 
     /**
      * @desc: 获取当前用户信息
-     * @return mixed
+     * @return array
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function getUser()
+    public static function getUser(): array
     {
         $config = self::_getConfig();
         if (is_callable($config['user_model'])) {
@@ -90,7 +91,6 @@ class JwtToken
      * @desc: 刷新令牌
      *
      * @return array|string[]
-     *
      * @throws JwtTokenException
      */
     public static function refreshToken(): array
@@ -121,7 +121,7 @@ class JwtToken
         }
         if ($config['is_single_device']) {
             $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'],  (string) $client,  (string) $extend['extend']['id'], $extend['exp'], $newToken['access_token']);
+            RedisHandler::generateToken($config['cache_token_pre'], (string)$client, (string)$extend['extend']['id'], $extend['exp'], $newToken['access_token']);
         }
         return $newToken;
     }
@@ -153,7 +153,7 @@ class JwtToken
         }
         if ($config['is_single_device']) {
             $client = $extend['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'],  (string) $client,  (string) $extend['id'], $config['access_exp'], $token['access_token']);
+            RedisHandler::generateToken($config['cache_token_pre'], (string)$client, (string)$extend['id'], $config['access_exp'], $token['access_token']);
         }
         return $token;
     }
