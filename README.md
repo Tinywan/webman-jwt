@@ -161,8 +161,17 @@ $user = [
 ];
 $token = JwtToken::generateToken($user);
 ```
-> 默认是`WEB`端
+默认是`WEB`端
 
+> 10. 自定义访问令牌和刷新令牌过期时间
+
+```php
+$extend = [
+    'id'  => 2024,
+    'access_exp'  => 7200,  // 2 小时
+];
+$token = Tinywan\Jwt\JwtToken::generateToken($extend);
+```
 ## 签名算法
 
 JWT 最常见的几种签名算法(JWA)：`HS256(HMAC-SHA256)` 、`RS256(RSA-SHA256)` 还有 `ES256(ECDSA-SHA256)`
