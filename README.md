@@ -163,7 +163,7 @@ $token = JwtToken::generateToken($user);
 ```
 默认是`WEB`端
 
-> 10. 自定义访问令牌和刷新令牌过期时间
+10、自定义访问令牌和刷新令牌过期时间
 
 ```php
 $extend = [
