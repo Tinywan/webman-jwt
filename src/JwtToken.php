@@ -155,7 +155,11 @@ class JwtToken
         if ($config['is_single_device']) {
             $client = $extend['client'] ?? self::TOKEN_CLIENT_WEB;
             RedisHandler::generateToken($config['cache_token_pre'], (string)$client, (string)$extend['id'], $config['access_exp'], $token['access_token']);
-            RedisHandler::generateToken($config["cache_refresh_token_pre"], (string)$client, (string)$extend['id'], $config['refresh_exp'], $token['refresh_token']);
+            if (!isset($config['refresh_disable']) || (isset($config['refresh_disable']) && $config['refresh_disable'] === false)) {
+                if (isset($config["cache_refresh_token_pre"])) {
+                    RedisHandler::generateToken($config["cache_refresh_token_pre"], (string)$client, (string)$extend['id'], $config['refresh_exp'], $token['refresh_token']);
+                }
+            }
         }
         return $token;
     }
