@@ -36,6 +36,26 @@ class RedisHandler
         Redis::setex($cacheKey, $ttl, $token);
     }
 
+
+    /**
+     * @desc: 刷新存储的缓存令牌
+     * @param string $pre
+     * @param string $client
+     * @param string $uid
+     * @param int $ttl
+     * @param string $token
+     * @return void
+     */
+    public static function refreshToken(string $pre, string $client, string $uid, int $ttl, string $token): void
+    {
+        $cacheKey = $pre . $client . ':' . $uid;
+        $key = Redis::keys($cacheKey . '*');
+        if (!empty($key)) {
+            $ttl = Redis::ttl($cacheKey);
+        }
+        Redis::setex($cacheKey, $ttl, $token);
+    }
+
     /**
      * @desc: 检查设备缓存令牌
      * @param string $pre

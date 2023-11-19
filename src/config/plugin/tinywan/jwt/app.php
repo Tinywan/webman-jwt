@@ -39,6 +39,9 @@ return [
         /** 缓存令牌前缀，默认 JWT:TOKEN: */
         'cache_token_pre' => 'JWT:TOKEN:',
 
+        /** 缓存刷新令牌前缀，默认 JWT:REFRESH_TOKEN: */
+        'cache_refresh_token_pre' => 'JWT:REFRESH_TOKEN:',
+
         /** 用户信息模型 */
         'user_model' => function ($uid) {
             return [];
