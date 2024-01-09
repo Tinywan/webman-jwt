@@ -219,7 +219,15 @@ class JwtToken
     {
         $authorization = request()->header('authorization');
         if (!$authorization || 'undefined' == $authorization) {
-            throw new JwtTokenException('请求未携带authorization信息');
+            $config = self::_getConfig();
+            if (!isset($config['is_support_get_token']) || false === $config['is_support_get_token']) {
+                throw new JwtTokenException('请求未携带authorization信息');
+            }
+            $authorization = request()->get($config['is_support_get_token_key']);
+            if (empty($authorization)) {
+                throw new JwtTokenException('请求未携带authorization信息');
+            }
+            $authorization = 'Bearer '.$authorization;
         }
 
         if (self::REFRESH_TOKEN != substr_count($authorization, '.')) {

@@ -47,6 +47,11 @@ return [
             return [];
         },
 
+        /** 是否支持 get 请求获取令牌 */
+        'is_support_get_token' => true,
+        /** GET 请求获取令牌请求key */
+        'is_support_get_token_key' => 'authorization',
+
         /** access令牌私钥 */
         'access_private_key' => <<<EOD
 -----BEGIN RSA PRIVATE KEY-----
