@@ -53,14 +53,14 @@ class JwtToken
 
     /**
      * @desc: 获取当前用户信息
-     * @return array
+     * @return mixed
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function getUser(): array
+    public static function getUser()
     {
         $config = self::_getConfig();
         if (is_callable($config['user_model'])) {
-            return $config['user_model'](self::getCurrentId()) ?? [];
+            return $config['user_model'](self::getCurrentId());
         }
         return [];
     }
