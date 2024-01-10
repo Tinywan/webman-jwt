@@ -29,10 +29,7 @@ class RedisHandler
     public static function generateToken(string $pre, string $client, string $uid, int $ttl, string $token): void
     {
         $cacheKey = $pre . $client. ':'. $uid;
-        $key = Redis::keys($cacheKey . '*');
-        if (!empty($key)) {
-            Redis::del(current($key));
-        }
+        Redis::del($cacheKey);
         Redis::setex($cacheKey, $ttl, $token);
     }
 
@@ -49,8 +46,8 @@ class RedisHandler
     public static function refreshToken(string $pre, string $client, string $uid, int $ttl, string $token): void
     {
         $cacheKey = $pre . $client . ':' . $uid;
-        $key = Redis::keys($cacheKey . '*');
-        if (!empty($key)) {
+        $isExists = Redis::exists($cacheKey);
+        if ($isExists) {
             $ttl = Redis::ttl($cacheKey);
         }
         Redis::setex($cacheKey, $ttl, $token);
@@ -87,10 +84,7 @@ class RedisHandler
      */
     public static function clearToken(string $pre, string $client, string $uid): bool
     {
-        $token = Redis::keys($pre . $client. ':'. $uid);
-        if ($token) {
-            Redis::del(current($token));
-        }
+        Redis::del($pre . $client. ':'. $uid);
         return true;
     }
 }
