@@ -89,16 +89,19 @@ class JwtToken
 
     /**
      * @desc: 刷新令牌
-     *
+     * @param array $_extend 拓展数据
      * @return array|string[]
      * @throws JwtTokenException
      */
-    public static function refreshToken(): array
+    public static function refreshToken(&$_extend = []): array
     {
         $token = self::getTokenFromHeaders();
         $config = self::_getConfig();
         try {
             $extend = self::verifyToken($token, self::REFRESH_TOKEN);
+            if (!empty($extend['extend'])){
+                $_extend = $extend['extend'];
+            }
         } catch (SignatureInvalidException $signatureInvalidException) {
             throw new JwtRefreshTokenExpiredException('刷新令牌无效',401021);
         } catch (BeforeValidException $beforeValidException) {
