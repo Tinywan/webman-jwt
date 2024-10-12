@@ -1,11 +1,23 @@
 # JSON Web Token (JWT) for webman plugin
 
-[![License](http://poser.pugx.org/tinywan/jwt/license)](https://packagist.org/packages/tinywan/jwt) 
-[![Latest Stable Version](http://poser.pugx.org/tinywan/jwt/v)](https://packagist.org/packages/tinywan/jwt) 
-[![Total Downloads](http://poser.pugx.org/tinywan/jwt/downloads)](https://packagist.org/packages/tinywan/jwt)
-[![Monthly Downloads](http://poser.pugx.org/tinywan/jwt/d/monthly)](https://packagist.org/packages/tinywan/jwt)
-[![Daily Downloads](http://poser.pugx.org/tinywan/jwt/d/daily)](https://packagist.org/packages/tinywan/jwt)
-[![PHP Version Require](http://poser.pugx.org/tinywan/jwt/require/php)](https://packagist.org/packages/tinywan/jwt)
+<div align="center">
+    <a href="https://github.com/Tinywan/webman-jwt/actions">
+        <img src="https://github.com/Tinywan/webman-jwt/actions/workflows/ci.yml/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://codecov.io/github/Tinywan/webman-jwt">
+        <img src="https://codecov.io/gh/Tinywan/webman-jwt/branch/main/graph/badge.svg" alt="Codecov Status">
+    </a>
+    <a href="https://github.com/Tinywan/webman-jwt/releases">
+        <img alt="Latest Stable Version" src="https://badgen.net/packagist/v/Tinywan/webman-jwt/latest">
+    </a>
+    <a href="https://github.com/Tinywan/webman-jwt/blob/main/composer.json">
+        <img alt="PHP Version Require" src="https://badgen.net/packagist/php/Tinywan/webman-jwt">
+    </a>
+    <a href="https://github.com/Tinywan/webman-jwt/blob/main/LICENSE">
+        <img alt="GitHub license" src="https://badgen.net/packagist/license/Tinywan/webman-jwt">
+    </a>
+</div>
+
 
 Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519)，该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。
 
