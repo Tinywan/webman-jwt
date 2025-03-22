@@ -66,10 +66,10 @@ class RedisHandler
     {
         $cacheKey = $pre . $client. ':'. $uid;
         if (!Redis::exists($cacheKey)) {
-            throw new JwtCacheTokenException('该账号已在其他设备登录，强制下线');
+            throw new JwtCacheTokenException('身份验证会话已过期，请再次登录！');
         }
         if (Redis::get($cacheKey) != $token) {
-            throw new JwtCacheTokenException('身份验证会话已过期，请再次登录！');
+            throw new JwtCacheTokenException('该账号已在其他设备登录，强制下线');
         }
         return true;
     }
