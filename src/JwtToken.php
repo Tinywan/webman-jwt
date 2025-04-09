@@ -324,19 +324,14 @@ class JwtToken
     private static function getPublicKey(string $algorithm, int $tokenType = self::ACCESS_TOKEN): string
     {
         $config = self::_getConfig();
-        switch ($algorithm) {
-            case 'HS256':
-                $key = self::ACCESS_TOKEN == $tokenType ? $config['access_secret_key'] : $config['refresh_secret_key'];
-                break;
-            case 'RS512':
-            case 'RS256':
-                $key = self::ACCESS_TOKEN == $tokenType ? $config['access_public_key'] : $config['refresh_public_key'];
-                break;
-            default:
-                $key = $config['access_secret_key'];
+
+        $isAccessToken = $tokenType === self::ACCESS_TOKEN;
+
+        if (in_array($algorithm, ['HS512', 'HS384', 'HS256'], true)) {
+            return $isAccessToken ? $config['access_secret_key'] : $config['refresh_secret_key'];
         }
 
-        return $key;
+        return $isAccessToken ? $config['access_public_key'] : $config['refresh_public_key'];
     }
 
     /**
@@ -347,19 +342,13 @@ class JwtToken
      */
     private static function getPrivateKey(array $config, int $tokenType = self::ACCESS_TOKEN): string
     {
-        switch ($config['algorithms']) {
-            case 'HS256':
-                $key = self::ACCESS_TOKEN == $tokenType ? $config['access_secret_key'] : $config['refresh_secret_key'];
-                break;
-            case 'RS512':
-            case 'RS256':
-                $key = self::ACCESS_TOKEN == $tokenType ? $config['access_private_key'] : $config['refresh_private_key'];
-                break;
-            default:
-                $key = $config['access_secret_key'];
+        $isAccessToken = $tokenType === self::ACCESS_TOKEN;
+
+        if (in_array($config['algorithms'], ['HS512', 'HS384', 'HS256'], true)) {
+            return $isAccessToken ? $config['access_secret_key'] : $config['refresh_secret_key'];
         }
 
-        return $key;
+        return $isAccessToken ? $config['access_private_key'] : $config['refresh_private_key'];
     }
 
     /**
