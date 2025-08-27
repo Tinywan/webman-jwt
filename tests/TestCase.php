@@ -21,6 +21,7 @@ class TestCase extends BaseTestCase
         $this->setupTestConfig();
     }
 
+    
     /**
      * 设置测试配置
      */
@@ -51,12 +52,13 @@ class TestCase extends BaseTestCase
             }
         }
 
-        // 模拟request函数
+        // 在测试环境中，我们定义request函数（如果不存在）
         if (!function_exists('request')) {
             function request() {
                 return new class {
                     public function header($key) {
-                        return 'Bearer test.token';
+                        // 返回null，让JWT验证失败并抛出预期的异常
+                        return null;
                     }
                     
                     public function get($key) {
