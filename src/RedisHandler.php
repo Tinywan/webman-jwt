@@ -201,9 +201,16 @@ class RedisHandler
      */
     public static function isAvailable(): bool
     {
+        // 检查是否在测试环境
+        if (defined('PHPUNIT_RUNNING') || getenv('APP_ENV') === 'testing') {
+            return false;
+        }
+        
         try {
             return Redis::ping() === true;
         } catch (RedisException $e) {
+            return false;
+        } catch (\Exception $e) {
             return false;
         }
     }

@@ -29,6 +29,12 @@ class TestCase extends BaseTestCase
         // 模拟配置函数
         if (!function_exists('config')) {
             function config($key) {
+                // Handle plugin config structure
+                if ($key === 'plugin.tinywan.jwt.app.jwt') {
+                    $config = require __DIR__ . '/../src/config/plugin/tinywan/jwt/app.php';
+                    return $config['jwt'];
+                }
+                
                 $config = require __DIR__ . '/config.php';
                 $keys = explode('.', $key);
                 $value = $config;
