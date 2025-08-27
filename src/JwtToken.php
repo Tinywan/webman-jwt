@@ -20,6 +20,7 @@ use Tinywan\Jwt\Exception\JwtRefreshTokenExpiredException;
 use Tinywan\Jwt\Exception\JwtTokenException;
 use Tinywan\Jwt\Exception\JwtConfigException;
 use Tinywan\Jwt\Exception\JwtTokenExpiredException;
+use Tinywan\Jwt\Exception\RedisConnectionException;
 use UnexpectedValueException;
 
 class JwtToken
@@ -42,7 +43,7 @@ class JwtToken
 
     /**
      * @desc: 获取当前登录ID
-     * @return mixed
+     * @return int|string 用户ID
      * @throws JwtTokenException
      * @author Tinywan(ShaoBo Wan)
      */
@@ -53,7 +54,7 @@ class JwtToken
 
     /**
      * @desc: 获取当前用户信息
-     * @return mixed
+     * @return array|object 用户信息数组或对象
      * @author Tinywan(ShaoBo Wan)
      */
     public static function getUser()
@@ -68,8 +69,8 @@ class JwtToken
     /**
      * @desc: 获取指定令牌扩展内容字段的值
      *
-     * @param string $val
-     * @return mixed|string
+     * @param string $val 字段名称
+     * @return mixed 字段值
      * @throws JwtTokenException
      */
     public static function getExtendVal(string $val)
@@ -93,7 +94,7 @@ class JwtToken
      * @return array|string[]
      * @throws JwtTokenException
      */
-    public static function refreshToken(&$_extend = []): array
+    public static function refreshToken(array &$_extend = []): array
     {
         $token = self::getTokenFromHeaders();
         $config = self::_getConfig();
@@ -122,9 +123,15 @@ class JwtToken
             $newToken['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
         if ($config['is_single_device']) {
-            $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'], (string)$client, (string)$extend['extend']['id'], $config['access_exp'], $newToken['access_token']);
-            RedisHandler::refreshToken($config["cache_refresh_token_pre"], (string)$client, (string)$extend['extend']['id'], $config['refresh_exp'], $newToken['refresh_token']);
+            self::handleSingleDeviceToken($config, $extend, $newToken);
+            // 刷新令牌需要特殊处理，使用refreshToken而不是generateToken
+            if (!isset($config['refresh_disable']) || ($config['refresh_disable'] === false)) {
+                if (isset($config["cache_refresh_token_pre"]) && isset($newToken['refresh_token'])) {
+                    $client = $extend['extend']['client'] ?? self::TOKEN_CLIENT_WEB;
+                    $uid = (string)$extend['extend']['id'];
+                    RedisHandler::refreshToken($config["cache_refresh_token_pre"], $client, $uid, $config['refresh_exp'], $newToken['refresh_token']);
+                }
+            }
         }
         return $newToken;
     }
@@ -155,13 +162,7 @@ class JwtToken
             $token['refresh_token'] = self::makeToken($payload['refreshPayload'], $refreshSecretKey, $config['algorithms']);
         }
         if ($config['is_single_device']) {
-            $client = $extend['client'] ?? self::TOKEN_CLIENT_WEB;
-            RedisHandler::generateToken($config['cache_token_pre'], (string)$client, (string)$extend['id'], $config['access_exp'], $token['access_token']);
-            if (!isset($config['refresh_disable']) || ($config['refresh_disable'] === false)) {
-                if (isset($config["cache_refresh_token_pre"])) {
-                    RedisHandler::generateToken($config["cache_refresh_token_pre"], (string)$client, (string)$extend['id'], $config['refresh_exp'], $token['refresh_token']);
-                }
-            }
+            self::handleSingleDeviceToken($config, $extend, $token);
         }
         return $token;
     }
@@ -291,6 +292,33 @@ class JwtToken
     }
 
     /**
+     * @desc: 处理单设备登录的Redis操作
+     *
+     * @param array $config 配置文件
+     * @param array $extend 扩展数据
+     * @param array $tokens 令牌数组
+     * @return void
+     * @throws RedisConnectionException
+     */
+    private static function handleSingleDeviceToken(array $config, array $extend, array $tokens): void
+    {
+        if (!RedisHandler::isAvailable()) {
+            throw new RedisConnectionException('Redis连接不可用，无法启用单设备登录功能');
+        }
+        
+        $client = $extend['client'] ?? self::TOKEN_CLIENT_WEB;
+        $uid = (string)($extend['extend']['id'] ?? $extend['id']);
+        
+        RedisHandler::generateToken($config['cache_token_pre'], $client, $uid, $config['access_exp'], $tokens['access_token']);
+        
+        if (!isset($config['refresh_disable']) || ($config['refresh_disable'] === false)) {
+            if (isset($config["cache_refresh_token_pre"]) && isset($tokens['refresh_token'])) {
+                RedisHandler::generateToken($config["cache_refresh_token_pre"], $client, $uid, $config['refresh_exp'], $tokens['refresh_token']);
+            }
+        }
+    }
+
+    /**
      * @desc: 获取加密载体.
      *
      * @param array $config 配置文件
@@ -374,6 +402,9 @@ class JwtToken
     {
         $config = self::_getConfig();
         if ($config['is_single_device']) {
+            if (!RedisHandler::isAvailable()) {
+                throw new RedisConnectionException('Redis连接不可用，无法清理令牌');
+            }
             $clearCacheRefreshTokenPre = RedisHandler::clearToken($config['cache_refresh_token_pre'], $client, (string)self::getCurrentId());
             $clearCacheTokenPre = RedisHandler::clearToken($config['cache_token_pre'], $client, (string)self::getCurrentId());
             return $clearCacheTokenPre && $clearCacheRefreshTokenPre;
