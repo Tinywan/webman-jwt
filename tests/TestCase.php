@@ -27,7 +27,21 @@ class TestCase extends BaseTestCase
      */
     protected function setupTestConfig(): void
     {
-        // 模拟配置函数
+        // 强制定义config函数，确保在测试前可用
+        $this->defineConfigFunction();
+        
+        // 强制定义request函数，确保在测试前可用
+        $this->defineRequestFunction();
+        
+        // 强制定义base_path函数，确保在测试前可用
+        $this->defineBasePathFunction();
+    }
+
+    /**
+     * 定义config函数
+     */
+    protected function defineConfigFunction(): void
+    {
         if (!function_exists('config')) {
             function config($key) {
                 // Handle plugin config structure
@@ -51,8 +65,13 @@ class TestCase extends BaseTestCase
                 return $value;
             }
         }
+    }
 
-        // 在测试环境中，我们定义request函数（如果不存在）
+    /**
+     * 定义request函数
+     */
+    protected function defineRequestFunction(): void
+    {
         if (!function_exists('request')) {
             function request() {
                 return new class {
@@ -67,8 +86,13 @@ class TestCase extends BaseTestCase
                 };
             }
         }
+    }
 
-        // 模拟base_path函数
+    /**
+     * 定义base_path函数
+     */
+    protected function defineBasePathFunction(): void
+    {
         if (!function_exists('base_path')) {
             function base_path() {
                 return __DIR__;

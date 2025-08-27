@@ -206,6 +206,11 @@ class RedisHandler
             return false;
         }
         
+        // 检查Redis类是否可用
+        if (!class_exists('support\Redis')) {
+            return false;
+        }
+        
         try {
             return Redis::ping() === true;
         } catch (RedisException $e) {
