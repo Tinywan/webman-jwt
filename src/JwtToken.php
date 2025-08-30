@@ -306,7 +306,7 @@ class JwtToken
             throw new RedisConnectionException('Redis连接不可用，无法启用单设备登录功能');
         }
         
-        $client = $extend['client'] ?? self::TOKEN_CLIENT_WEB;
+        $client = $extend['extend']['client'] ?? $extend['client'] ?? self::TOKEN_CLIENT_WEB;
         $uid = (string)($extend['extend']['id'] ?? $extend['id']);
         
         RedisHandler::generateToken($config['cache_token_pre'], $client, $uid, $config['access_exp'], $tokens['access_token']);
