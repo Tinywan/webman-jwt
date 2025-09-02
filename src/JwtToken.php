@@ -386,15 +386,6 @@ class JwtToken
      */
     private static function _getConfig(): array
     {
-        // 在测试环境中，直接加载配置文件
-        if (defined('PHPUNIT_RUNNING') || getenv('APP_ENV') === 'testing') {
-            $configFile = __DIR__ . '/config/plugin/tinywan/jwt/app.php';
-            if (file_exists($configFile)) {
-                $config = require $configFile;
-                return $config['jwt'] ?? [];
-            }
-        }
-        
         $config = config('plugin.tinywan.jwt.app.jwt');
         if (empty($config)) {
             throw new JwtConfigException('jwt配置文件不存在');

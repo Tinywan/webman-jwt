@@ -39,7 +39,7 @@ class RedisHandler
      * @param string $uid 用户ID
      * @return string 完整的缓存键名
      */
-    private static function generateKey(string $pre, string $client, string $uid)
+    private static function generateKey(string $pre, string $client, string $uid): string
     {
         return sprintf('%s%s:%s', $pre, $client, $uid);
     }
@@ -79,7 +79,10 @@ class RedisHandler
         
         self::safeExecute(function() use ($cacheKey, $ttl, $token) {
             Redis::del($cacheKey);
-            $result = Redis::setex($cacheKey, $ttl, $token);
+            
+            // 增加leeway时间到TTL中，确保在宽容时间内Redis缓存仍然存在
+            $finalTtl = self::calculateFinalTtl($ttl);
+            $result = Redis::setex($cacheKey, $finalTtl, $token);
             
             if (!$result) {
                 throw new RedisConnectionException('Redis设置令牌失败');
@@ -112,7 +115,9 @@ class RedisHandler
                 }
             }
             
-            $result = Redis::setex($cacheKey, $ttl, $token);
+            // 增加leeway时间到TTL中，确保在宽容时间内Redis缓存仍然存在
+            $finalTtl = self::calculateFinalTtl($ttl);
+            $result = Redis::setex($cacheKey, $finalTtl, $token);
             if (!$result) {
                 throw new RedisConnectionException('Redis刷新令牌失败');
             }
@@ -196,16 +201,45 @@ class RedisHandler
     }
 
     /**
+     * @desc: 计算包含leeway时间的最终TTL
+     * @param int $ttl 原始TTL
+     * @return int 包含leeway时间的最终TTL
+     */
+    private static function calculateFinalTtl(int $ttl): int
+    {
+        // 获取JWT配置中的leeway时间
+        $config = self::getJwtConfig();
+        $leeway = $config['leeway'] ?? 0;
+        
+        // 返回原始TTL加上leeway时间
+        return $ttl + $leeway;
+    }
+
+    /**
+     * @desc: 获取JWT配置
+     * @return array JWT配置数组
+     */
+    private static function getJwtConfig(): array
+    {
+        if (function_exists('config')) {
+            $config = config('plugin.tinywan.jwt.app.jwt');
+            if (!empty($config)) {
+                return $config;
+            }
+        }
+        
+        // 默认配置
+        return [
+            'leeway' => 60,
+        ];
+    }
+
+    /**
      * @desc: 检查Redis是否可用
      * @return bool Redis是否可用
      */
     public static function isAvailable(): bool
     {
-        // 检查是否在测试环境
-        if (defined('PHPUNIT_RUNNING') || getenv('APP_ENV') === 'testing') {
-            return false;
-        }
-        
         // 检查Redis类是否可用
         if (!class_exists('support\Redis')) {
             return false;
