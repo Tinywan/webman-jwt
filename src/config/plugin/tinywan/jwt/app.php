@@ -7,13 +7,13 @@ return [
         'algorithms' => 'HS256',
 
         /** access令牌秘钥 */
-        'access_secret_key' => '2022d3d3LmJq',
+        'access_secret_key' => '5e923d88405f79ad02e9161183853e57ece80c65315ff684c5e7efde25881f28',
 
         /** access令牌过期时间，单位：秒。默认 2 小时 */
         'access_exp' => 7200,
 
         /** refresh令牌秘钥 */
-        'refresh_secret_key' => '2022KTxigxc9o50c',
+        'refresh_secret_key' => '0c7fc8d5e58be9a5d59527be32740ba5c3c85dc534e8d90a402a529cac94366a',
 
         /** refresh令牌过期时间，单位：秒。默认 7 天 */
         'refresh_exp' => 604800,
