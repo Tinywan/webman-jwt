@@ -5,6 +5,8 @@ namespace Tinywan\Jwt;
 class Install
 {
     public const WEBMAN_PLUGIN = true;
+    private const ACCESS_PLACEHOLDER = '__JWT_ACCESS_SECRET_KEY__';
+    private const REFRESH_PLACEHOLDER = '__JWT_REFRESH_SECRET_KEY__';
 
     /**
      * @var array
@@ -46,6 +48,45 @@ class Install
             }
             //symlink(__DIR__ . "/$source", base_path()."/$dest");
             copy_dir(__DIR__ . "/$source", base_path()."/$dest");
+            self::initJwtSecrets(base_path()."/$dest/app.php");
+        }
+    }
+
+    /**
+     * 安装时初始化JWT密钥（32位随机字符串）
+     * @param string $configFile
+     * @return void
+     */
+    protected static function initJwtSecrets(string $configFile): void
+    {
+        if (!is_file($configFile) || !is_readable($configFile) || !is_writable($configFile)) {
+            return;
+        }
+
+        $content = file_get_contents($configFile);
+        if (!is_string($content) || $content === '') {
+            return;
+        }
+
+        if (strpos($content, self::ACCESS_PLACEHOLDER) === false && strpos($content, self::REFRESH_PLACEHOLDER) === false) {
+            return;
+        }
+
+        try {
+            $accessKey = bin2hex(random_bytes(16));
+            $refreshKey = bin2hex(random_bytes(16));
+        } catch (\Exception $e) {
+            return;
+        }
+
+        $updated = str_replace(
+            [self::ACCESS_PLACEHOLDER, self::REFRESH_PLACEHOLDER],
+            [$accessKey, $refreshKey],
+            $content
+        );
+
+        if ($updated !== $content) {
+            file_put_contents($configFile, $updated);
         }
     }
 
