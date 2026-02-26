@@ -53,7 +53,7 @@ class Install
     }
 
     /**
-     * 安装时初始化JWT密钥（32位随机字符串）
+     * 安装时初始化JWT密钥（64位随机字符串）
      * @param string $configFile
      * @return void
      */
@@ -73,8 +73,8 @@ class Install
         }
 
         try {
-            $accessKey = bin2hex(random_bytes(16));
-            $refreshKey = bin2hex(random_bytes(16));
+            $accessKey = bin2hex(random_bytes(32));
+            $refreshKey = bin2hex(random_bytes(32));
         } catch (\Exception $e) {
             return;
         }
