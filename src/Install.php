@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tinywan\Jwt;
 
 class Install
@@ -8,18 +10,16 @@ class Install
     private const ACCESS_PLACEHOLDER = '__JWT_ACCESS_SECRET_KEY__';
     private const REFRESH_PLACEHOLDER = '__JWT_REFRESH_SECRET_KEY__';
 
-    /**
-     * @var array
-     */
-    protected static $pathRelation = array(
-  'config/plugin/tinywan/jwt' => 'config/plugin/tinywan/jwt',
-);
+    /** @var array<string, string> */
+    protected static array $pathRelation = [
+        'config/plugin/tinywan/jwt' => 'config/plugin/tinywan/jwt',
+    ];
 
     /**
      * Install
      * @return void
      */
-    public static function install()
+    public static function install(): void
     {
         static::installByRelation();
     }
@@ -28,7 +28,7 @@ class Install
      * Uninstall
      * @return void
      */
-    public static function uninstall()
+    public static function uninstall(): void
     {
         self::uninstallByRelation();
     }
@@ -37,18 +37,19 @@ class Install
      * installByRelation
      * @return void
      */
-    public static function installByRelation()
+    public static function installByRelation(): void
     {
         foreach (static::$pathRelation as $source => $dest) {
-            if ($pos = strrpos($dest, '/')) {
-                $parent_dir = base_path().'/'.substr($dest, 0, $pos);
+            $pos = strrpos($dest, '/');
+            if ($pos !== false) {
+                $parent_dir = base_path() . '/' . substr($dest, 0, $pos);
                 if (!is_dir($parent_dir)) {
-                    mkdir($parent_dir, 0777, true);
+                    mkdir($parent_dir, 0o777, true);
                 }
             }
             //symlink(__DIR__ . "/$source", base_path()."/$dest");
-            copy_dir(__DIR__ . "/$source", base_path()."/$dest");
-            self::initJwtSecrets(base_path()."/$dest/app.php");
+            copy_dir(__DIR__ . "/{$source}", base_path() . "/{$dest}");
+            self::initJwtSecrets(base_path() . "/{$dest}/app.php");
         }
     }
 
@@ -68,7 +69,10 @@ class Install
             return;
         }
 
-        if (strpos($content, self::ACCESS_PLACEHOLDER) === false && strpos($content, self::REFRESH_PLACEHOLDER) === false) {
+        if (
+            strpos($content, self::ACCESS_PLACEHOLDER) === false
+            && strpos($content, self::REFRESH_PLACEHOLDER) === false
+        ) {
             return;
         }
 
@@ -82,7 +86,7 @@ class Install
         $updated = str_replace(
             [self::ACCESS_PLACEHOLDER, self::REFRESH_PLACEHOLDER],
             [$accessKey, $refreshKey],
-            $content
+            $content,
         );
 
         if ($updated !== $content) {
@@ -94,16 +98,16 @@ class Install
      * uninstallByRelation
      * @return void
      */
-    public static function uninstallByRelation()
+    public static function uninstallByRelation(): void
     {
         foreach (static::$pathRelation as $source => $dest) {
-            $path = base_path()."/$dest";
+            $path = base_path() . "/{$dest}";
             if (!is_dir($path) && !is_file($path)) {
                 continue;
             }
             /*if (is_link($path) {
-                unlink($path);
-            }*/
+             * unlink($path);
+             * }*/
             remove_dir($path);
         }
     }

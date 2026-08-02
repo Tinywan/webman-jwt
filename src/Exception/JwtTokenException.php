@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc JwtTokenException.php 描述信息
  * @author Tinywan(ShaoBo Wan)
@@ -9,6 +10,4 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt\Exception;
 
-class JwtTokenException extends \RuntimeException
-{
-}
+class JwtTokenException extends \RuntimeException {}

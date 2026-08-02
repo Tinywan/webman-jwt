@@ -1,0 +1,6 @@
+php-version = "8.2"
+
+[source]
+paths = ["src", "tests"]
+includes = ["vendor"]
+excludes = []

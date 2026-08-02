@@ -6,22 +6,27 @@ on:
     branches: [ "main" ]
 
 jobs:
-  PHPUnit:
-    name: PHPUnit (PHP ${{ matrix.php }})
+  quality:
+    name: Quality (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php:
+          - "8.2"
+          - "8.3"
           - "8.4"
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phpunit:9, composer:v2
+          tools: composer:v2
           coverage: xdebug
-      - run: composer install
-      - run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer format:check
+      - run: composer lint
+      - run: composer analyse
+      - run: composer test -- --coverage-clover=coverage.xml --coverage-filter=src
 
       - uses: codecov/codecov-action@v4
         with:

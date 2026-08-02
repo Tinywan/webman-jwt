@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc JwtRefreshTokenExpiredException
  * @author Tinywan(ShaoBo Wan)
@@ -9,7 +10,4 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt\Exception;
 
-
-class JwtRefreshTokenExpiredException extends \RuntimeException
-{
-}
+class JwtRefreshTokenExpiredException extends \RuntimeException {}

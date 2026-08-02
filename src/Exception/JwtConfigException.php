@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @desc JwtConfigException
  * @author Tinywan(ShaoBo Wan)
@@ -9,7 +10,4 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt\Exception;
 
-
-class JwtConfigException extends \RuntimeException
-{
-}
+class JwtConfigException extends \RuntimeException {}

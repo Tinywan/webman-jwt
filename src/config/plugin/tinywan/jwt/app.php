@@ -16,7 +16,7 @@ return [
         'refresh_secret_key' => '__JWT_REFRESH_SECRET_KEY__',
 
         /** refresh令牌过期时间，单位：秒。默认 7 天 */
-        'refresh_exp' => 604800,
+        'refresh_exp' => 604_800,
 
         /** refresh 令牌是否禁用，默认不禁用 false */
         'refresh_disable' => false,
@@ -34,7 +34,7 @@ return [
         'is_single_device' => false,
 
         /** 缓存令牌时间，单位：秒。默认 7 天 */
-        'cache_token_ttl' => 604800,
+        'cache_token_ttl' => 604_800,
 
         /** 缓存令牌前缀，默认 JWT:TOKEN: */
         'cache_token_pre' => 'JWT:TOKEN:',
@@ -54,30 +54,30 @@ return [
 
         /** access令牌私钥 */
         'access_private_key' => <<<EOD
------BEGIN RSA PRIVATE KEY-----
-...
------END RSA PRIVATE KEY-----
-EOD,
+            -----BEGIN RSA PRIVATE KEY-----
+            ...
+            -----END RSA PRIVATE KEY-----
+            EOD,
 
         /** access令牌公钥 */
         'access_public_key' => <<<EOD
------BEGIN PUBLIC KEY-----
-...
------END PUBLIC KEY-----
-EOD,
+            -----BEGIN PUBLIC KEY-----
+            ...
+            -----END PUBLIC KEY-----
+            EOD,
 
         /** refresh令牌私钥 */
         'refresh_private_key' => <<<EOD
------BEGIN RSA PRIVATE KEY-----
-...
------END RSA PRIVATE KEY-----
-EOD,
+            -----BEGIN RSA PRIVATE KEY-----
+            ...
+            -----END RSA PRIVATE KEY-----
+            EOD,
 
         /** refresh令牌公钥 */
         'refresh_public_key' => <<<EOD
------BEGIN PUBLIC KEY-----
-...
------END PUBLIC KEY-----
-EOD,
+            -----BEGIN PUBLIC KEY-----
+            ...
+            -----END PUBLIC KEY-----
+            EOD,
     ],
 ];

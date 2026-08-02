@@ -1,0 +1,145 @@
+variant = "loose"
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "invalid-return-statement"
+message = '''Invalid return type for function `Tinywan\Jwt\JwtToken::_getConfig`: expected `array{'access_exp': int, 'access_private_key': string, 'access_public_key': string, 'access_secret_key': string, 'algorithms': string, 'cache_refresh_token_pre': string, 'cache_token_pre': string, 'is_single_device': bool, 'is_support_get_token'?: bool, 'is_support_get_token_key'?: string, 'iss': string, 'leeway': int, 'nbf': int, 'refresh_disable'?: bool, 'refresh_exp': int, 'refresh_private_key': string, 'refresh_public_key': string, 'refresh_secret_key': string, 'user_model'?: (callable(int|string): mixed)}`, but found `non-empty-array<array-key, mixed>`.'''
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "invalid-type-cast"
+message = "Casting `mixed` to `array`."
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "less-specific-nested-return-statement"
+message = '''Returned type `array{'access_token': string, 'expires_in': nonnull, 'refresh_token'?: string, 'token_type': string('Bearer')}` is less specific than the declared return type `array{'access_token': string, 'expires_in': int, 'refresh_token'?: string, 'token_type': string}` for function `Tinywan\Jwt\JwtToken::generateToken` due to nested 'mixed'.'''
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Tinywan\Jwt\JwtToken::makeToken`: expected `array<array-key, mixed>`, but found `mixed`.'
+count = 3
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Tinywan\Jwt\RedisHandler::generateToken`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `Tinywan\Jwt\RedisHandler::generateToken`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #2 of `Tinywan\Jwt\RedisHandler::refreshToken`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #4 of `Tinywan\Jwt\RedisHandler::generateToken`: expected `int`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #5 of `Tinywan\Jwt\RedisHandler::generateToken`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #5 of `Tinywan\Jwt\RedisHandler::generateToken`: expected `string`, but found `nonnull`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-array-access"
+message = "Unsafe array access on type `mixed`."
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-operand"
+message = "Right operand in binary operation has type `mixed`."
+count = 3
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `Tinywan\Jwt\JwtToken::getPrivateKey`. Saw type `mixed`.'
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "mixed-return-statement"
+message = 'Could not infer a precise return type for function `Tinywan\Jwt\JwtToken::getUser`. Saw type `mixed`.'
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "possible-method-access-on-null"
+message = "Attempting to call a method on `null`."
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'is_support_get_token_key' accessed on `array{'access_exp': int, 'access_private_key': string, 'access_public_key': string, 'access_secret_key': string, 'algorithms': string, 'cache_refresh_token_pre': string, 'cache_token_pre': string, 'is_single_device': bool, 'is_support_get_token': true, 'is_support_get_token_key'?: string, 'iss': string, 'leeway': int, 'nbf': int, 'refresh_disable'?: bool, 'refresh_exp': int, 'refresh_private_key': string, 'refresh_public_key': string, 'refresh_secret_key': string, 'user_model'?: (callable(int|string): mixed)}`."
+count = 2
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "possibly-undefined-string-array-index"
+message = "Possibly undefined array key 'user_model' accessed on `array{'access_exp': int, 'access_private_key': string, 'access_public_key': string, 'access_secret_key': string, 'algorithms': string, 'cache_refresh_token_pre': string, 'cache_token_pre': string, 'is_single_device': bool, 'is_support_get_token'?: bool, 'is_support_get_token_key'?: string, 'iss': string, 'leeway': int, 'nbf': int, 'refresh_disable'?: bool, 'refresh_exp': int, 'refresh_private_key': string, 'refresh_public_key': string, 'refresh_secret_key': string, 'user_model'?: (callable(int|string): mixed)}`."
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "src/JwtToken.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
+
+[[issues]]
+file = "src/RedisHandler.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "src/RedisHandler.php"
+code = "non-documented-method"
+message = 'Ambiguous method call to `ping` on class `support\Redis`.'
+count = 2
+
+[[issues]]
+file = "tests/Feature/JwtTokenTest.php"
+code = "mixed-method-access"
+message = "Attempting to access a method on a non-object type (`mixed`)."
+count = 1

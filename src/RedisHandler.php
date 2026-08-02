@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Tinywan\Jwt;
 
+use RedisException;
 use support\Redis;
 use Tinywan\Jwt\Exception\JwtCacheTokenException;
 use Tinywan\Jwt\Exception\RedisConnectionException;
-use RedisException;
 
 class RedisHandler
 {
@@ -21,7 +21,7 @@ class RedisHandler
      * @desc: 检查Redis连接状态
      * @throws RedisConnectionException 当Redis连接失败时抛出异常
      */
-    private static function checkConnection()
+    private static function checkConnection(): void
     {
         try {
             if (!Redis::ping()) {
@@ -46,20 +46,22 @@ class RedisHandler
 
     /**
      * @desc: 安全执行Redis操作
-     * @param callable $callback Redis操作回调函数
-     * @return mixed 回调函数执行结果
+     * @template T
+     * @param callable(): T $callback Redis操作回调函数
+     * @return T 回调函数执行结果
      * @throws RedisConnectionException
      */
-    private static function safeExecute(callable $callback)
+    private static function safeExecute(callable $callback): mixed
     {
         self::checkConnection();
-        
+
         try {
             return $callback();
         } catch (RedisException $e) {
             throw new RedisConnectionException('Redis操作失败: ' . $e->getMessage());
         }
     }
+
     /**
      * @desc: 生成缓存令牌
      * （1）登录时，判断该账号是否在其它设备登录，如果有，就请空之前key清除，
@@ -72,24 +74,29 @@ class RedisHandler
      * @throws RedisConnectionException
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function generateToken(string $pre, string $client, string $uid, int $ttl, string $token)
-    {
+    public static function generateToken(
+        string $pre,
+        string $client,
+        string $uid,
+        int $ttl,
+        #[\SensitiveParameter]
+        string $token,
+    ): void {
         self::validateRedisParams($ttl, $token);
         $cacheKey = self::generateKey($pre, $client, $uid);
-        
-        self::safeExecute(function() use ($cacheKey, $ttl, $token) {
+
+        self::safeExecute(static function () use ($cacheKey, $ttl, $token) {
             Redis::del($cacheKey);
-            
+
             // 增加leeway时间到TTL中，确保在宽容时间内Redis缓存仍然存在
             $finalTtl = self::calculateFinalTtl($ttl);
             $result = Redis::setex($cacheKey, $finalTtl, $token);
-            
+
             if (!$result) {
                 throw new RedisConnectionException('Redis设置令牌失败');
             }
         });
     }
-
 
     /**
      * @desc: 刷新存储的缓存令牌
@@ -101,12 +108,18 @@ class RedisHandler
      * @throws RedisConnectionException
      * @return void
      */
-    public static function refreshToken(string $pre, string $client, string $uid, int $ttl, string $token)
-    {
+    public static function refreshToken(
+        string $pre,
+        string $client,
+        string $uid,
+        int $ttl,
+        #[\SensitiveParameter]
+        string $token,
+    ): void {
         self::validateRedisParams($ttl, $token);
         $cacheKey = self::generateKey($pre, $client, $uid);
-        
-        self::safeExecute(function() use ($cacheKey, $ttl, $token) {
+
+        self::safeExecute(static function () use ($cacheKey, $ttl, $token) {
             $isExists = Redis::exists($cacheKey);
             if ($isExists) {
                 $currentTtl = Redis::ttl($cacheKey);
@@ -114,7 +127,7 @@ class RedisHandler
                     $ttl = $currentTtl;
                 }
             }
-            
+
             // 增加leeway时间到TTL中，确保在宽容时间内Redis缓存仍然存在
             $finalTtl = self::calculateFinalTtl($ttl);
             $result = Redis::setex($cacheKey, $finalTtl, $token);
@@ -135,28 +148,37 @@ class RedisHandler
      * @throws JwtCacheTokenException
      * @author Tinywan(ShaoBo Wan)
      */
-    public static function verifyToken(string $pre, string $client, string $uid, string $token): bool
-    {
-        if (empty($token)) {
+    public static function verifyToken(
+        string $pre,
+        string $client,
+        string $uid,
+        #[\SensitiveParameter]
+        string $token,
+    ): bool {
+        if ($token === '') {
             throw new \InvalidArgumentException('Token不能为空');
         }
 
         $cacheKey = self::generateKey($pre, $client, $uid);
-        
-        return self::safeExecute(function() use ($cacheKey, $token) {
+
+        return self::safeExecute(static function () use ($cacheKey, $token) {
             if (!Redis::exists($cacheKey)) {
                 throw new JwtCacheTokenException('身份验证会话已过期，请再次登录！');
             }
-            
+
             $cachedToken = Redis::get($cacheKey);
             if ($cachedToken === false) {
                 throw new RedisConnectionException('Redis获取令牌失败');
             }
-            
-            if ($cachedToken != $token) {
+
+            if (!is_string($cachedToken)) {
+                throw new RedisConnectionException('Redis令牌格式无效');
+            }
+
+            if (!hash_equals($cachedToken, $token)) {
                 throw new JwtCacheTokenException('该账号已在其他设备登录，强制下线');
             }
-            
+
             return true;
         });
     }
@@ -173,12 +195,10 @@ class RedisHandler
     public static function clearToken(string $pre, string $client, string $uid): bool
     {
         $cacheKey = self::generateKey($pre, $client, $uid);
-        
-        return self::safeExecute(function() use ($cacheKey) {
-            $result = Redis::del($cacheKey);
-            if ($result === false) {
-                throw new RedisConnectionException('Redis清理令牌失败');
-            }
+
+        return self::safeExecute(static function () use ($cacheKey) {
+            Redis::del($cacheKey);
+
             return true;
         });
     }
@@ -189,13 +209,13 @@ class RedisHandler
      * @param string $token 令牌
      * @throws \InvalidArgumentException
      */
-    private static function validateRedisParams(int $ttl, string $token): void
+    private static function validateRedisParams(int $ttl, #[\SensitiveParameter] string $token): void
     {
         if ($ttl <= 0) {
             throw new \InvalidArgumentException('TTL必须大于0');
         }
-        
-        if (empty($token)) {
+
+        if ($token === '') {
             throw new \InvalidArgumentException('Token不能为空');
         }
     }
@@ -209,8 +229,8 @@ class RedisHandler
     {
         // 获取JWT配置中的leeway时间
         $config = self::getJwtConfig();
-        $leeway = $config['leeway'] ?? 0;
-        
+        $leeway = (int) ($config['leeway'] ?? 0);
+
         // 返回原始TTL加上leeway时间
         return $ttl + $leeway;
     }
@@ -223,11 +243,11 @@ class RedisHandler
     {
         if (function_exists('config')) {
             $config = config('plugin.tinywan.jwt.app.jwt');
-            if (!empty($config)) {
+            if (is_array($config) && $config !== []) {
                 return $config;
             }
         }
-        
+
         // 默认配置
         return [
             'leeway' => 60,
@@ -244,7 +264,7 @@ class RedisHandler
         if (!class_exists('support\Redis')) {
             return false;
         }
-        
+
         try {
             return Redis::ping() === true;
         } catch (RedisException $e) {
