@@ -12,7 +12,7 @@ namespace Tinywan\Jwt\Exception;
 
 class RedisConnectionException extends JwtTokenException
 {
-    public const ERROR_CODE = 500_001;
+    public const ERROR_CODE = 500001;
 
     public function __construct(
         string $message = 'Redis连接失败',

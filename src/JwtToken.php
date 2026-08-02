@@ -110,15 +110,15 @@ class JwtToken
                 $_extend = $tokenExtend;
             }
         } catch (SignatureInvalidException $signatureInvalidException) {
-            throw new JwtRefreshTokenExpiredException('刷新令牌无效', 401_021);
+            throw new JwtRefreshTokenExpiredException('刷新令牌无效', 401021);
         } catch (BeforeValidException $beforeValidException) {
-            throw new JwtRefreshTokenExpiredException('刷新令牌尚未生效', 401_022);
+            throw new JwtRefreshTokenExpiredException('刷新令牌尚未生效', 401022);
         } catch (ExpiredException $expiredException) {
-            throw new JwtRefreshTokenExpiredException('刷新令牌会话已过期，请再次登录！', 401_023);
+            throw new JwtRefreshTokenExpiredException('刷新令牌会话已过期，请再次登录！', 401023);
         } catch (UnexpectedValueException $unexpectedValueException) {
-            throw new JwtRefreshTokenExpiredException('刷新令牌获取的扩展字段不存在', 401_024);
+            throw new JwtRefreshTokenExpiredException('刷新令牌获取的扩展字段不存在', 401024);
         } catch (JwtCacheTokenException|\Exception $exception) {
-            throw new JwtRefreshTokenExpiredException($exception->getMessage(), 401_025);
+            throw new JwtRefreshTokenExpiredException($exception->getMessage(), 401025);
         }
         $payload = self::generatePayload($config, $tokenExtend);
         $secretKey = self::getPrivateKey($config);
@@ -206,15 +206,15 @@ class JwtToken
         try {
             return self::verifyToken($token, $tokenType);
         } catch (SignatureInvalidException $signatureInvalidException) {
-            throw new JwtTokenException('身份验证令牌无效', 401_011);
+            throw new JwtTokenException('身份验证令牌无效', 401011);
         } catch (BeforeValidException $beforeValidException) {
-            throw new JwtTokenException('身份验证令牌尚未生效', 401_012);
+            throw new JwtTokenException('身份验证令牌尚未生效', 401012);
         } catch (ExpiredException $expiredException) {
-            throw new JwtTokenExpiredException('身份验证会话已过期，请重新登录！', 401_013);
+            throw new JwtTokenExpiredException('身份验证会话已过期，请重新登录！', 401013);
         } catch (UnexpectedValueException $unexpectedValueException) {
-            throw new JwtTokenException('获取的扩展字段不存在', 401_014);
+            throw new JwtTokenException('获取的扩展字段不存在', 401014);
         } catch (JwtCacheTokenException|\Exception $exception) {
-            throw new JwtTokenException($exception->getMessage(), 401_015);
+            throw new JwtTokenException($exception->getMessage(), 401015);
         }
     }
 
@@ -249,29 +249,29 @@ class JwtToken
         if (!is_string($authorization) || $authorization === '' || $authorization === 'undefined') {
             $config = self::_getConfig();
             if (!isset($config['is_support_get_token']) || false === $config['is_support_get_token']) {
-                throw new JwtTokenException('请求未携带authorization信息', 401_000);
+                throw new JwtTokenException('请求未携带authorization信息', 401000);
             }
             $authorization = request()->get($config['is_support_get_token_key']);
             if (!is_string($authorization) || $authorization === '') {
-                throw new JwtTokenException('请求未携带authorization信息', 401_000);
+                throw new JwtTokenException('请求未携带authorization信息', 401000);
             }
             $authorization = 'Bearer ' . $authorization;
         }
 
         if (self::REFRESH_TOKEN !== substr_count($authorization, '.')) {
-            throw new JwtTokenException('非法的authorization信息', 401_001);
+            throw new JwtTokenException('非法的authorization信息', 401001);
         }
 
         if (2 !== count(explode(' ', $authorization))) {
-            throw new JwtTokenException('Bearer验证中的凭证格式有误，中间必须有个空格', 401_000);
+            throw new JwtTokenException('Bearer验证中的凭证格式有误，中间必须有个空格', 401000);
         }
 
         [$type, $token] = explode(' ', $authorization);
         if ('Bearer' !== $type) {
-            throw new JwtTokenException('接口认证方式需为Bearer', 401_000);
+            throw new JwtTokenException('接口认证方式需为Bearer', 401000);
         }
         if ($token === '' || 'undefined' === $token) {
-            throw new JwtTokenException('尝试获取的Authorization信息不存在', 401_000);
+            throw new JwtTokenException('尝试获取的Authorization信息不存在', 401000);
         }
 
         return $token;
